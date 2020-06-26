@@ -5,6 +5,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import Welcome from './views/Welcome';
 import EventParticipant from './views/EventParticipant';
 import EventAdmin from './views/EventAdmin';
+import Account from './views/Account';
+import Admin from './views/Admin';
 
 /* import auth from './store/actions/user/auth'; */
 
@@ -28,6 +30,8 @@ function App() {
       <Switch>
         {/* <Route path="/" component={isUserLoggedIn ? Home : Welcome} exact /> */}
         <Route path="/" component={Welcome} exact />
+        <Route path="/account" component={Account} exact />
+        <Route path="/admin" component={Admin} exact />
         <Route path="/event/*" component={EventParticipant} exact />
         <Route path="/event-admin/*" component={EventAdmin} exact />
       </Switch>
