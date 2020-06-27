@@ -8,32 +8,28 @@ import EventAdmin from './views/EventAdmin';
 import Account from './views/Account';
 import Admin from './views/Admin';
 
-/* import auth from './store/actions/user/auth'; */
+import auth from './store/actions/user/auth';
 
 function App() {
-  /* const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.userReducer);
 
   useEffect(() => {
-    const isThereToken = localStorage.getItem('login_auth');
-    if (isThereToken) {
-      dispatch(auth());
-    }
-  }, [auth]);
+    console.log('object')
+    const jwt = localStorage.getItem('jwt');
 
-  useEffect(() => {
-    if (!Array.isArray(user)) setIsUserLoggedIn(true);
-  }, [user]); */
+    if (!jwt) return;
+
+    dispatch(auth(jwt));
+  }, [auth,dispatch]);
 
   return (
     <Router>
       <Switch>
-        {/* <Route path="/" component={isUserLoggedIn ? Home : Welcome} exact /> */}
         <Route path="/" component={Welcome} exact />
-        <Route path="/account" component={Account} exact />
-        <Route path="/admin" component={Admin} exact />
-        <Route path="/event/*" component={EventParticipant} exact />
-        <Route path="/event-admin/*" component={EventAdmin} exact />
+        <Route path="/account" component={user ? Admin : Account} exact />
+        <Route path="/event/:code" component={EventParticipant} exact />
+        <Route path="/event-admin/:code" component={EventAdmin} exact />
       </Switch>
     </Router>
   );

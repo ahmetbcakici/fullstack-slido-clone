@@ -1,6 +1,17 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 
-function EventAdmin() {
+function EventAdmin({
+  match: {
+    params: {code},
+  },
+}) {
+
+
+useEffect(() => {
+    
+}, [])
+
+
   return <div></div>;
 }
 

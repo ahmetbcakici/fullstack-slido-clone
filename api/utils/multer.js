@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
       cb(null, false);
   };
   
-  export const upload = multer({
+  export default multer({
     storage: storage,
     limits: {
       fileSize: 1024 * 1024 * 2, // 2mb limit on profile photo uploading

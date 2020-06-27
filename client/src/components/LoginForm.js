@@ -9,12 +9,16 @@ function LoginForm() {
 
   const dispatch = useDispatch();
 
-  const loginFormSubmit = (e) => {
+  const loginFormSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password) return; // null fields validation
 
-    dispatch(login(email, password));
+    try {
+      await dispatch(login({email, password}));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
