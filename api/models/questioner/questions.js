@@ -5,7 +5,10 @@ const questionSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   eventId: {type: mongoose.Schema.Types.ObjectId, ref: 'Event'},
   question: String,
-  generatedAt: Date.now,
+  generatedAt: {
+    type:Date,
+    default:Date.now,
+  },
   likeCount: Number,
 });
 

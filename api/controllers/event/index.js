@@ -1,8 +1,4 @@
-import mongoose from 'mongoose';
-
-import User from '../models/user';
-import Event from '../models/event';
-
-export const get = (req, res) => {
-  return res.send('test');
-};
+export {default as generateEvent} from './generateEvent';
+export {default as getQuestions} from './getQuestions';
+export {default as sendQuestion} from './sendQuestion';
+export {default as getEventId} from './getEventId';

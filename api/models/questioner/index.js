@@ -5,8 +5,12 @@ import questionSchema from './questions';
 
 const questionerSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  name: String,
+  name: {
+    type: String,
+    default: 'Anon',
+  },
   email: String,
+  joinedEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}],
   questions: [questionSchema],
 });
 
