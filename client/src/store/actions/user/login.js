@@ -11,9 +11,9 @@ export default ({email, password}) => async (dispatch) =>
         email,
         password,
       });
+      
       localStorage.setItem('jwt', token);
-      dispatch({type: 'LOGIN', payload: user});
-      return resolve();
+      return dispatch({type: 'SET_USER', payload: user});
     } catch (error) {
       return reject(error);
     }
