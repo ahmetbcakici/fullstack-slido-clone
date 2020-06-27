@@ -9,9 +9,9 @@ import {
 
 const router = express.Router();
 
+router.get('/questions', getQuestions);
 router.get('/:eventCode', getEventId);
 router.post('/', generateEvent);
-router.get('/questions', getQuestions);
 router.post('/question', sendQuestion);
 
 export default router;

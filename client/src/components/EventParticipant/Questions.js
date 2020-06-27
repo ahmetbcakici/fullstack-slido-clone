@@ -1,16 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {getQuestions} from '../../api/event'
+import {getQuestions} from '../../api/event';
 
-function Questions(/* {
-  match: {
-    params: {code},
-  },
-} */) {
+function Questions({eventId}) {
   useEffect(() => {
-    /* getQuestions(); */
-  }, [])
+    if(eventId){
+    getQuestions({eventId})
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));}
+  }, [eventId]);
 
   return (
     <div>

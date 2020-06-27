@@ -5,7 +5,7 @@ function AskToSpeaker({eventId}) {
   const [question, setQuestion] = useState('');
 
   const handleSendQuestion = () => {
-    const questionerId = localStorage.getItem('questionerId');
+    const questionerId = localStorage.getItem('questionerId');/* todo: make questioner id usable */
     sendQuestion({questionerId, eventId, question});
   };
 

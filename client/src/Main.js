@@ -7,6 +7,7 @@ import EventParticipant from './views/EventParticipant';
 import EventAdmin from './views/EventAdmin';
 import Account from './views/Account';
 import Admin from './views/Admin';
+import Page404 from './views/404';
 
 import auth from './store/actions/user/auth';
 
@@ -15,13 +16,13 @@ function App() {
   const user = useSelector((state) => state.userReducer);
 
   useEffect(() => {
-    console.log('object')
+    console.log('object');
     const jwt = localStorage.getItem('jwt');
 
     if (!jwt) return;
 
     dispatch(auth(jwt));
-  }, [auth,dispatch]);
+  }, [auth, dispatch]);
 
   return (
     <Router>
@@ -30,6 +31,7 @@ function App() {
         <Route path="/account" component={user ? Admin : Account} exact />
         <Route path="/event/:code" component={EventParticipant} exact />
         <Route path="/event-admin/:code" component={EventAdmin} exact />
+        <Route path="/*" component={Page404} exact />
       </Switch>
     </Router>
   );

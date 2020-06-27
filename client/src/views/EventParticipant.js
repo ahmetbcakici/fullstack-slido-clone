@@ -1,4 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
+import {useHistory} from 'react-router-dom';
 
 import {
   AskToSpeaker,
@@ -16,19 +17,23 @@ function Event({
   },
 }) {
   const [eventId, setEventId] = useState('');
+  const history = useHistory();
 
   useEffect(() => {
     findEventIdByCode();
   }, []);
 
   const findEventIdByCode = async () => {
-    const eventId = await getEventId({eventCode: code});
-    if (eventId) {
+    try {
+      const eventId = await getEventId({eventCode: code});
       setEventId(eventId);
       return;
+    } catch (error) {
+      history.push('/404');
     }
 
     //todo event could not found so redirect to 404
+    console.log('lol');
   };
 
   return (

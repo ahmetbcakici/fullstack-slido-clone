@@ -5,7 +5,6 @@ import Event from '../../models/event';
 
 export default async (req, res) => {
   let {questionerId, eventId, question} = req.body;
-    console.log(eventId)
   if (!questionerId) {
     const {_id} = await Questioner.create({
       _id: mongoose.Types.ObjectId(),
@@ -14,6 +13,13 @@ export default async (req, res) => {
   }
 
   const questioner = await Questioner.findById(questionerId);
-  questioner.questions.push({eventId, question});
+  const questionId = mongoose.Types.ObjectId();
+  questioner.questions.push({_id: questionId, eventId, question});
   questioner.save();
+
+  const event = await Event.findById(eventId).select({questions: 1});
+  event.questions.push(questionId);
+  event.save();
+
+  res.send();
 };
