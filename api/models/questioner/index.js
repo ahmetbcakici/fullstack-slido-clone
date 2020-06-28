@@ -1,8 +1,6 @@
 import mongoose from 'mongoose';
 const {Schema, model} = mongoose;
 
-import questionSchema from './questions';
-
 const questionerSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   name: {
@@ -11,7 +9,7 @@ const questionerSchema = new Schema({
   },
   email: String,
   joinedEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}],
-  questions: [questionSchema],
+  questions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Question'}],
 });
 
 const Questioner = model('Questioner', questionerSchema);

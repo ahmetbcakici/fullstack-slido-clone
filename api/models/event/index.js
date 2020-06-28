@@ -10,7 +10,7 @@ const eventSchema = new Schema({
     default: Date.now,
   },
   code: String,
-  questions:[{type: mongoose.Schema.Types.ObjectId, ref: 'Questioner.questions'}],
+  questions:[{type: mongoose.Schema.Types.ObjectId, ref: 'Question'}],
 });
 
 const Event = model('Event', eventSchema);

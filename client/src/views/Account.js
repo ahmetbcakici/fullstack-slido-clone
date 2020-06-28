@@ -4,7 +4,7 @@ import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
 
 function Account() {
-  const [isLoginForm, setIsLoginForm] = useState(true);
+  const [isLoginForm, setIsLoginForm] = useState(false);
 
   const returnForm = () => {
     if (isLoginForm) return <LoginForm />;

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+import Question from '../../models/question';
 import Questioner from '../../models/questioner';
 import Event from '../../models/event';
 
@@ -12,14 +13,22 @@ export default async (req, res) => {
     questionerId = _id;
   }
 
-  const questioner = await Questioner.findById(questionerId);
   const questionId = mongoose.Types.ObjectId();
-  questioner.questions.push({_id: questionId, eventId, question});
-  questioner.save();
+  Question.create({
+    _id: questionId,
+    ownerQuestionerId: questionerId,
+    eventId,
+    question,
+  });
 
+  const questioner = await Questioner.findById(questionerId).select({
+    questions: 1,
+  });
   const event = await Event.findById(eventId).select({questions: 1});
+  questioner.questions.push(questionId);
   event.questions.push(questionId);
   event.save();
+  questioner.save();
 
   res.send();
 };
