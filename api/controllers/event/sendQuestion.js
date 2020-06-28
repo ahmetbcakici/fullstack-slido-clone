@@ -6,13 +6,7 @@ import Event from '../../models/event';
 
 export default async (req, res) => {
   let {questionerId, eventId, question} = req.body;
-  if (!questionerId) {
-    const {_id} = await Questioner.create({
-      _id: mongoose.Types.ObjectId(),
-    });
-    questionerId = _id;
-  }
-
+  
   const questionId = mongoose.Types.ObjectId();
   Question.create({
     _id: questionId,

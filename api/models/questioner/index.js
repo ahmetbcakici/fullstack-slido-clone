@@ -10,6 +10,7 @@ const questionerSchema = new Schema({
   email: String,
   joinedEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}],
   questions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Question'}],
+  likedQuestions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Question'}],
 });
 
 const Questioner = model('Questioner', questionerSchema);
