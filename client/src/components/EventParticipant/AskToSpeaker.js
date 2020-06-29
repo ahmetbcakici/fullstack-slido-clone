@@ -5,7 +5,6 @@ import {sendQuestion} from '../../api/question';
 
 function AskToSpeaker({eventId, questioner}) {
   const [question, setQuestion] = useState('');
-  /* const [name, setName] = useState(questioner.name); */
   const [isAnon, setIsAnon] = useState(false);
 
   const handleSetIsAnon = () => setIsAnon(!isAnon);

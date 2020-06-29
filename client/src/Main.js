@@ -10,6 +10,7 @@ import Admin from './views/Admin';
 import Page404 from './views/404';
 
 import auth from './store/actions/user/auth';
+import Questioner from './views/Questioner';
 
 function App() {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ function App() {
       <Switch>
         <Route path="/" component={Welcome} exact />
         <Route path="/account" component={user ? Admin : Account} exact />
+        <Route path="/questioner" component={Questioner} exact />
         <Route path="/event/:code" component={EventParticipant} exact />
         <Route path="/event-admin/:code" component={EventAdmin} exact />
         <Route path="/*" component={Page404} exact />
