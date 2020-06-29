@@ -1,12 +1,17 @@
 import React, {useState, useEffect} from 'react';
+
+import NameArea from './NameArea';
 import {sendQuestion} from '../../api/question';
 
-function AskToSpeaker({eventId}) {
+function AskToSpeaker({eventId, questioner}) {
   const [question, setQuestion] = useState('');
+  const [name, setName] = useState(questioner.name);
+  const [isAnon, setIsAnon] = useState(false);
+
+  const handleSetIsAnon = () => setIsAnon(!isAnon);
 
   const handleSendQuestion = () => {
-    const questionerId = localStorage.getItem('questionerId');/* todo: make questioner id usable */
-    sendQuestion({questionerId, eventId, question});
+    sendQuestion({questionerId: questioner._id, eventId, question, isAnon});
   };
 
   return (
@@ -19,7 +24,11 @@ function AskToSpeaker({eventId}) {
         rows="10"
       ></textarea>
       <br />
-      <input type="text" placeholder="your name (optional)" />
+      <NameArea
+        questioner={questioner}
+        anonFunc={handleSetIsAnon}
+        isAnon={isAnon}
+      />
       <br />
       <button onClick={handleSendQuestion}>send</button>
     </div>

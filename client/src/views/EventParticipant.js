@@ -18,7 +18,7 @@ function Event({
   },
 }) {
   const [eventId, setEventId] = useState('');
-  const [questionerId, setQuestionerId] = useState('');
+  const [questioner, setQuestioner] = useState('');
   const history = useHistory();
 
   useEffect(() => {
@@ -36,18 +36,19 @@ function Event({
     }
   };
 
-  /* put this function to generaller place to check */
+  /* todo put this function to generaller place to check */
+  /* todo do not check just localstorage, also cheCk id validation from db */
   const questionerChecker = async () => {
-    const questionerId = localStorage.getItem('questionerId');
-    if (questionerId) {
-      setQuestionerId(questionerId);
+    const questioner = localStorage.getItem('questioner');
+    if (questioner) {
+      setQuestioner(JSON.parse(questioner));
       return;
     }
 
     try {
       const {data} = await generateQuestioner();
-      localStorage.setItem('questionerId', data);
-      setQuestionerId(data);
+      localStorage.setItem('questioner', JSON.stringify(data));
+      setQuestioner(data);
     } catch (error) {
       console.log(error);
     }
@@ -55,10 +56,10 @@ function Event({
 
   return (
     <Fragment>
-      <Navbar eventId={eventId} questionerId={questionerId} />
+      <Navbar eventId={eventId} questioner={questioner} />
       {/* <Sidebar/> */}
-      <AskToSpeaker eventId={eventId} questionerId={questionerId} />
-      <Questions eventId={eventId} questionerId={questionerId} />
+      <AskToSpeaker eventId={eventId} questioner={questioner} />
+      <Questions eventId={eventId} questioner={questioner} />
     </Fragment>
   );
 }

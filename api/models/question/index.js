@@ -6,6 +6,10 @@ const questionSchema = new Schema({
   ownerQuestionerId: {type: mongoose.Schema.Types.ObjectId, ref: 'Questioner'},
   eventId: {type: mongoose.Schema.Types.ObjectId, ref: 'Event'},
   question: String,
+  isAnon: {
+    type: Boolean,
+    default: false,
+  },
   generatedAt: {
     type: Date,
     default: Date.now,

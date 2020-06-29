@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {getQuestions, deleteQuestion, editQuestion} from '../../api/question';
 
-function Questions({eventId, questionerId}) {
+function Questions({eventId, questioner}) {
   const [questions, setQuestions] = useState('');
 
   useEffect(() => {
@@ -21,11 +21,12 @@ function Questions({eventId, questionerId}) {
 
   const handleDeleteQuestion = async (e) => {
     const questionId = e.target.parentElement.id;
-    deleteQuestion({eventId, questionerId, questionId});
+    deleteQuestion({eventId, questionerId: questioner._id, questionId});
   };
 
   const handleEditQuestion = (e) => {
-    editQuestion();
+    const questionId = e.target.parentElement.id;
+    editQuestion({questionId, question: 'new question'}); //todo question gonna be dynamic
   };
 
   const renderQuestions = () => {
@@ -33,7 +34,7 @@ function Questions({eventId, questionerId}) {
       return questions.map(
         ({_id, question, generatedAt, ownerQuestionerId}) => {
           let isQuestionOwner = false;
-          if (ownerQuestionerId._id === questionerId) isQuestionOwner = true;
+          if (ownerQuestionerId._id === questioner._id) isQuestionOwner = true;
           return (
             <div key={_id} id={_id}>
               <b>{ownerQuestionerId.name}: </b>
@@ -42,6 +43,7 @@ function Questions({eventId, questionerId}) {
               {isQuestionOwner && (
                 <span onClick={handleEditQuestion}>edit</span>
               )}
+              |{' '}
               {isQuestionOwner && (
                 <span onClick={handleDeleteQuestion}>delete</span>
               )}

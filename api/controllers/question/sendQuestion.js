@@ -5,14 +5,15 @@ import Questioner from '../../models/questioner';
 import Event from '../../models/event';
 
 export default async (req, res) => {
-  let {questionerId, eventId, question} = req.body;
-  
+  let {questionerId, eventId, question, isAnon} = req.body;
+
   const questionId = mongoose.Types.ObjectId();
   Question.create({
     _id: questionId,
     ownerQuestionerId: questionerId,
     eventId,
     question,
+    isAnon,
   });
 
   const questioner = await Questioner.findById(questionerId).select({
