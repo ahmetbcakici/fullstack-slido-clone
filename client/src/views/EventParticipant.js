@@ -44,16 +44,21 @@ function Event({
       return;
     }
 
-    const {data} = await generateQuestioner();
-    localStorage.setItem('questionerId', data);
+    try {
+      const {data} = await generateQuestioner();
+      localStorage.setItem('questionerId', data);
+      setQuestionerId(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <Fragment>
-      <Navbar eventId={eventId} />
+      <Navbar eventId={eventId} questionerId={questionerId} />
       {/* <Sidebar/> */}
-      <AskToSpeaker eventId={eventId} />
-      <Questions eventId={eventId} />
+      <AskToSpeaker eventId={eventId} questionerId={questionerId} />
+      <Questions eventId={eventId} questionerId={questionerId} />
     </Fragment>
   );
 }

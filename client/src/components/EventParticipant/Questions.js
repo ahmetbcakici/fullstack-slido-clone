@@ -1,17 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, Fragment} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {getQuestions} from '../../api/event';
+import {getQuestions, deleteQuestion, editQuestion} from '../../api/question';
 
-function Questions({eventId}) {
+function Questions({eventId, questionerId}) {
   const [questions, setQuestions] = useState('');
 
   useEffect(() => {
-    /* if (eventId) {
-      getQuestions({eventId})
-        .then((res) => setQuestions(res.data))
-        .catch((err) => console.log(err));
-    } */
     (async function () {
       if (eventId) {
         try {
@@ -24,20 +19,53 @@ function Questions({eventId}) {
     })();
   }, [eventId]);
 
+  const handleDeleteQuestion = async (e) => {
+    const questionId = e.target.parentElement.id;
+    deleteQuestion({eventId, questionerId, questionId});
+  };
+
+  const handleEditQuestion = (e) => {
+    editQuestion();
+  };
+
+  const renderQuestions = () => {
+    if (questions) {
+      return questions.map(
+        ({_id, question, generatedAt, ownerQuestionerId}) => {
+          let isQuestionOwner = false;
+          if (ownerQuestionerId._id === questionerId) isQuestionOwner = true;
+          return (
+            <div key={_id} id={_id}>
+              <b>{ownerQuestionerId.name}: </b>
+              {question} <small>{generatedAt}</small>
+              <br />
+              {isQuestionOwner && (
+                <span onClick={handleEditQuestion}>edit</span>
+              )}
+              {isQuestionOwner && (
+                <span onClick={handleDeleteQuestion}>delete</span>
+              )}
+            </div>
+          );
+        }
+      );
+    }
+  };
+
   return (
-    <div>
+    <Fragment>
       <p>popular</p>
       <p>recent</p>
+      {renderQuestions()}
       {/* todo 2x data fetching */}
-      {questions &&
+      {/* {questions &&
         questions.map(({_id, question, generatedAt, ownerQuestionerId}) => (
           <p key={_id}>
             <b>{ownerQuestionerId.name}: </b>
             {question} <small>{generatedAt}</small>
           </p>
-        ))}
-      <div>... sil düzenle</div>
-    </div>
+        ))} */}
+    </Fragment>
   );
 }
 

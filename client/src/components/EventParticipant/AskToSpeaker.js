@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {sendQuestion} from '../../api/event';
+import {sendQuestion} from '../../api/question';
 
 function AskToSpeaker({eventId}) {
   const [question, setQuestion] = useState('');
