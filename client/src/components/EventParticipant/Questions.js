@@ -32,12 +32,12 @@ function Questions({eventId, questioner}) {
   const renderQuestions = () => {
     if (questions) {
       return questions.map(
-        ({_id, question, generatedAt, ownerQuestionerId}) => {
+        ({_id, question, generatedAt,isAnon, ownerQuestionerId}) => {
           let isQuestionOwner = false;
           if (ownerQuestionerId._id === questioner._id) isQuestionOwner = true;
           return (
             <div key={_id} id={_id}>
-              <b>{ownerQuestionerId.name}: </b>
+              <b>{isAnon ? 'Anon' : ownerQuestionerId.name}: </b>
               {question} <small>{generatedAt}</small>
               <br />
               {isQuestionOwner && (
