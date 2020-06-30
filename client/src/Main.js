@@ -8,22 +8,37 @@ import EventAdmin from './views/EventAdmin';
 import Account from './views/Account';
 import Admin from './views/Admin';
 import Page404 from './views/404';
-
-import auth from './store/actions/user/auth';
 import Questioner from './views/Questioner';
+
+import {auth} from './store/actions/user';
+import {generateQuestioner, getQuestioner} from './store/actions/questioner';
 
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userReducer);
+  const questioner = useSelector((state) => state.questionerReducer);
 
   useEffect(() => {
-    console.log('object');
     const jwt = localStorage.getItem('jwt');
 
     if (!jwt) return;
 
     dispatch(auth(jwt));
   }, [auth, dispatch]);
+
+  useEffect(() => {
+    const questionerId = localStorage.getItem('questionerId');
+
+    (async function () {
+      if (!questionerId) {
+        const {_id} = await dispatch(generateQuestioner());
+        localStorage.setItem('questionerId', _id);
+        return;
+      }
+
+      dispatch(getQuestioner({questionerId}));
+    })();
+  }, [generateQuestioner, dispatch]);
 
   return (
     <Router>

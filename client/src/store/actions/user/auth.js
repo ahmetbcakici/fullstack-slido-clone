@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import {API_URL} from '../../../config';
 
-export default (token) => async (dispatch) =>
+export default (token) => (dispatch) =>
   new Promise(async (resolve, reject) => {
     try {
       const {data} = await axios.post(`${API_URL}/user/auth`, {

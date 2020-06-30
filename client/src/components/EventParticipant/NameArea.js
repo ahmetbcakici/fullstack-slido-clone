@@ -1,14 +1,22 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
-import {editName} from '../../api/questioner';
+import {editName} from '../../store/actions/questioner';
 
-function NameArea({questioner, anonFunc, isAnon}) {
-  const isQuestionerAnon = questioner.name === 'Anon' ? true : false;
+function NameArea({anonFunc, isAnon}) {
+  const questioner = useSelector((state) => state.questionerReducer);
+  const [isQuestionerAnon, setIsQuestionerAnon] = useState(false);
   const [nameEditing, setNameEditing] = useState(false);
   const [name, setName] = useState('');
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (questioner)
+      setIsQuestionerAnon(questioner.name === 'Anon' ? true : false);
+  }, [questioner]);
 
   const handleEditName = () => {
-    editName({questionerId: questioner._id, name});
+    dispatch(editName({questionerId: questioner._id, name}));
   };
 
   const renderAskingAs = () => {
@@ -42,7 +50,7 @@ function NameArea({questioner, anonFunc, isAnon}) {
     );
   };
 
-  return <Fragment>{renderAskingAs()}</Fragment>;
+  return <Fragment>{questioner ? renderAskingAs() : <p>loading</p>}</Fragment>;
 }
 
 export default NameArea;

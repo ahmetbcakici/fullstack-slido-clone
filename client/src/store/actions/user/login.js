@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import {API_URL} from '../../../config';
 
-export default ({email, password}) => async (dispatch) =>
+export default ({email, password}) => (dispatch) =>
   new Promise(async (resolve, reject) => {
     try {
       const {

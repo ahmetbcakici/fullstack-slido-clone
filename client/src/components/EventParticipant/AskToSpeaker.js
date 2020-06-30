@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react';
+import {useSelector} from 'react-redux';
 
 import NameArea from './NameArea';
 import {sendQuestion} from '../../api/question';
 
-function AskToSpeaker({eventId, questioner}) {
+function AskToSpeaker({eventId}) {
   const [question, setQuestion] = useState('');
   const [isAnon, setIsAnon] = useState(false);
+  const questioner = useSelector((state) => state.questionerReducer);
 
   const handleSetIsAnon = () => setIsAnon(!isAnon);
 
@@ -24,7 +26,6 @@ function AskToSpeaker({eventId, questioner}) {
       ></textarea>
       <br />
       <NameArea
-        questioner={questioner}
         anonFunc={handleSetIsAnon}
         isAnon={isAnon}
       />
