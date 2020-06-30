@@ -15,13 +15,32 @@ function NameArea({anonFunc, isAnon}) {
       setIsQuestionerAnon(questioner.name === 'Anon' ? true : false);
   }, [questioner]);
 
+  const NameEdit = () => (
+    <div style={{display: !nameEditing && 'none'}}>
+      <input
+        type="text"
+        value={name}
+        onChange={({target: {value}}) => setName(value)}
+      />
+      <button onClick={handleEditName}>OK</button>
+    </div>
+  );
+
   const handleEditName = () => {
     dispatch(editName({questionerId: questioner._id, name}));
+    setNameEditing(false);
   };
-  
 
   const renderAskingAs = () => {
-    if (isQuestionerAnon) return <p>Asking as Anon</p>;
+    if (isQuestionerAnon)
+      return (
+        <Fragment>
+          <p>
+            Asking as Anon <b onClick={() => setNameEditing(true)}>edit</b>
+          </p>
+          {NameEdit()}
+        </Fragment>
+      );
 
     if (isAnon)
       return (
@@ -38,14 +57,7 @@ function NameArea({anonFunc, isAnon}) {
           Asking as {questioner.name}{' '}
           <b onClick={() => setNameEditing(true)}>edit</b>
         </p>
-        <div style={{display: !nameEditing && 'none'}}>
-          <input
-            type="text"
-            value={name}
-            onChange={({target: {value}}) => setName(value)}
-          />
-          <button onClick={handleEditName}>OK</button>
-        </div>
+        {NameEdit()}
         <p onClick={anonFunc}>Switch to Anon</p>
       </Fragment>
     );
