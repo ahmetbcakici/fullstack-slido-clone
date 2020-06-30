@@ -18,6 +18,7 @@ function NameArea({anonFunc, isAnon}) {
   const handleEditName = () => {
     dispatch(editName({questionerId: questioner._id, name}));
   };
+  
 
   const renderAskingAs = () => {
     if (isQuestionerAnon) return <p>Asking as Anon</p>;
