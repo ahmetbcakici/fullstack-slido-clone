@@ -1,23 +1,29 @@
 import React, {useEffect, useState, Fragment} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {getQuestions, deleteQuestion, editQuestion} from '../../api/question';
+import {
+  getQuestions,
+  deleteQuestion,
+  editQuestion,
+  likeQuestion,
+} from '../../api/question';
 
-function Questions({eventId, questioner}) {
+function Questions({eventId}) {
   const [questions, setQuestions] = useState('');
+  const questioner = useSelector((state) => state.questionerReducer);
 
   useEffect(() => {
-    (async function () {
-      if (eventId) {
-        try {
-          const {data} = await getQuestions({eventId});
-          setQuestions(data);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    })();
+    if (eventId) handleGetQuestions();
   }, [eventId]);
+
+  const handleGetQuestions = async () => {
+    try {
+      const {data} = await getQuestions({eventId});
+      setQuestions(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleDeleteQuestion = async (e) => {
     const questionId = e.target.parentElement.id;
@@ -29,10 +35,22 @@ function Questions({eventId, questioner}) {
     editQuestion({questionId, question: 'new question'}); //todo question gonna be dynamic
   };
 
+  const handleLikeQuestion = (e) => {
+    const questionId = e.target.parentElement.id;
+    likeQuestion({questionId,questionerId:questioner._id});
+  };
+
   const renderQuestions = () => {
     if (questions) {
       return questions.map(
-        ({_id, question, generatedAt, isAnon, ownerQuestionerId}) => {
+        ({
+          _id,
+          question,
+          generatedAt,
+          isAnon,
+          ownerQuestionerId,
+          likeCount,
+        }) => {
           let isQuestionOwner = false;
           if (ownerQuestionerId._id === questioner._id) isQuestionOwner = true;
           return (
@@ -41,12 +59,20 @@ function Questions({eventId, questioner}) {
               {question} <small>{generatedAt}</small>
               <br />
               {isQuestionOwner && (
-                <span onClick={handleEditQuestion}>edit</span>
+                <span style={{color: 'red'}} onClick={handleEditQuestion}>
+                  edit
+                </span>
               )}
               |{' '}
               {isQuestionOwner && (
-                <span onClick={handleDeleteQuestion}>delete</span>
+                <span style={{color: 'blue'}} onClick={handleDeleteQuestion}>
+                  delete
+                </span>
               )}
+              |{' '}
+              <span style={{color: 'green'}} onClick={handleLikeQuestion}>
+                like {likeCount}
+              </span>
             </div>
           );
         }
@@ -59,14 +85,6 @@ function Questions({eventId, questioner}) {
       <p>popular</p>
       <p>recent</p>
       {renderQuestions()}
-      {/* todo 2x data fetching */}
-      {/* {questions &&
-        questions.map(({_id, question, generatedAt, ownerQuestionerId}) => (
-          <p key={_id}>
-            <b>{ownerQuestionerId.name}: </b>
-            {question} <small>{generatedAt}</small>
-          </p>
-        ))} */}
     </Fragment>
   );
 }

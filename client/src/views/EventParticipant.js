@@ -35,11 +35,10 @@ function Event({
 
   return (
     <Fragment>
-      <h1>q</h1>
       <Navbar eventId={eventId} />
-
+      {/* Sidebar */}
       <AskToSpeaker eventId={eventId} />
-      {/* <Questions eventId={eventId} />} */}
+      <Questions eventId={eventId} />
     </Fragment>
   );
 }

@@ -14,7 +14,11 @@ const questionSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  likeCount: Number,
+  likeCount: {
+    type: Number,
+    default: 0,
+  },
+  questionersLiked: [String],
 });
 
 const Question = model('Question', questionSchema);
