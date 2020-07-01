@@ -13,6 +13,7 @@ export default async (req, res) => {
     question.questionersLiked.remove(questionerId);
     question.save();
 
+    res.io.emit('set-questions');
     return res.send();
   }
 
@@ -22,5 +23,6 @@ export default async (req, res) => {
   question.questionersLiked.push(questionerId);
   question.save();
 
+  res.io.emit('set-questions');
   res.send();
 };

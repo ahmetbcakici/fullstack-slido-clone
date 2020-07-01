@@ -25,5 +25,6 @@ export default async (req, res) => {
   event.save();
   questioner.save();
 
+  res.io.emit('set-questions');
   res.send();
 };

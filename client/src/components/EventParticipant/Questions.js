@@ -1,5 +1,6 @@
 import React, {useEffect, useState, Fragment} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import io from 'socket.io-client';
 
 import {
   getQuestions,
@@ -8,12 +9,23 @@ import {
   likeQuestion,
 } from '../../api/question';
 
+const socket = io('http://localhost:2244');
+
 function Questions({eventId}) {
+  const [questionEdit, setQuestionEdit] = useState('');
   const [questions, setQuestions] = useState('');
+  const [questionEditing, setQuestionEditing] = useState(false);
   const questioner = useSelector((state) => state.questionerReducer);
 
   useEffect(() => {
-    if (eventId) handleGetQuestions();
+    if (eventId) {
+      handleGetQuestions();
+
+      socket.on('set-questions', async () => {
+        console.log('socket on');
+        handleGetQuestions();
+      });
+    }
   }, [eventId]);
 
   const handleGetQuestions = async () => {
@@ -31,13 +43,14 @@ function Questions({eventId}) {
   };
 
   const handleEditQuestion = (e) => {
-    const questionId = e.target.parentElement.id;
-    editQuestion({questionId, question: 'new question'}); //todo question gonna be dynamic
+    const questionId = e.target.parentElement.parentElement.id;
+    editQuestion({questionId, question: questionEdit});
+    setQuestionEditing(false);
   };
 
   const handleLikeQuestion = (e) => {
     const questionId = e.target.parentElement.id;
-    likeQuestion({questionId,questionerId:questioner._id});
+    likeQuestion({questionId, questionerId: questioner._id});
   };
 
   const renderQuestions = () => {
@@ -59,7 +72,10 @@ function Questions({eventId}) {
               {question} <small>{generatedAt}</small>
               <br />
               {isQuestionOwner && (
-                <span style={{color: 'red'}} onClick={handleEditQuestion}>
+                <span
+                  style={{color: 'red'}}
+                  onClick={() => setQuestionEditing(true)}
+                >
                   edit
                 </span>
               )}
@@ -73,6 +89,14 @@ function Questions({eventId}) {
               <span style={{color: 'green'}} onClick={handleLikeQuestion}>
                 like {likeCount}
               </span>
+              <div id="bomba" style={{display: !questionEditing && 'none'}}>
+                <input
+                  type="text"
+                  value={questionEdit}
+                  onChange={({target: {value}}) => setQuestionEdit(value)}
+                />
+                <button onClick={handleEditQuestion}>OK</button>
+              </div>
             </div>
           );
         }

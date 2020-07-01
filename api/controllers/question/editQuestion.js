@@ -5,5 +5,6 @@ export default async (req, res) => {
 
   await Question.findByIdAndUpdate(questionId, {question});
 
+  res.io.emit('set-questions');
   res.send();
 };

@@ -7,10 +7,19 @@ import cors from 'cors';
 import api from './routes';
 
 const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
 const PORT = 2244 || process.env.PORT;
+
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static('assets'));
+app.use(function (req, res, next) {
+  res.io = io;
+  next();
+});
+io.setMaxListeners(0);
+
 dotenv.config();
 
 mongoose.connect(process.env.DB_URI, {useNewUrlParser: true}, (err) => {
@@ -25,4 +34,9 @@ mongoose.set('useCreateIndex', true); */
 
 app.use('/', api);
 
-app.listen(PORT, () => console.log(`Server is running on ${PORT}`)); // Run server
+/* io.on('connection', (socket) => {
+  socket.emit("x")
+  console.log('a user connected');
+}); */
+
+http.listen(PORT, () => console.log(`Server is running on ${PORT}`)); // Run server
