@@ -1,6 +1,8 @@
 import React, {useEffect, useState, Fragment} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import io from 'socket.io-client';
+
+import {socket} from '../../config';
+import {compareValues} from '../../utils';
 
 import {
   getQuestions,
@@ -8,8 +10,6 @@ import {
   editQuestion,
   likeQuestion,
 } from '../../api/question';
-
-const socket = io('http://localhost:2244');
 
 function Questions({eventId}) {
   const [questionEdit, setQuestionEdit] = useState('');
@@ -20,6 +20,7 @@ function Questions({eventId}) {
   useEffect(() => {
     if (eventId) {
       handleGetQuestions();
+      console.log('hiır');
 
       socket.on('set-questions', async () => {
         console.log('socket on');
@@ -27,6 +28,21 @@ function Questions({eventId}) {
       });
     }
   }, [eventId]);
+
+  const sortQuestions = (popularSelected = false) => {
+    if (popularSelected === true) {
+      const questionsSortedByPopularity = [...questions].sort(
+        compareValues('likeCount', 'desc')
+      );
+      setQuestions(questionsSortedByPopularity);
+      return;
+    }
+
+    const questionsSortedByRecent = [...questions].sort(
+      compareValues('generatedAt', 'desc')
+    );
+    setQuestions(questionsSortedByRecent);
+  };
 
   const handleGetQuestions = async () => {
     try {
@@ -106,8 +122,11 @@ function Questions({eventId}) {
 
   return (
     <Fragment>
-      <p>popular</p>
-      <p>recent</p>
+      <p onClick={() => sortQuestions(true)}>popular</p>
+      <p onClick={sortQuestions}>recent</p>
+      <h1 onClick={() => console.log(questions)}>
+        click here to press console STATE
+      </h1>
       {renderQuestions()}
     </Fragment>
   );
