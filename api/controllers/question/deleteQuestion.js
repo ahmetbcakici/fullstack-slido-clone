@@ -17,6 +17,6 @@ export default async (req, res) => {
 
   await Question.findByIdAndDelete(questionId);
 
-  res.io.emit('set-questions');
+  res.io.to(eventId).emit('set-questions');
   res.send();
 };

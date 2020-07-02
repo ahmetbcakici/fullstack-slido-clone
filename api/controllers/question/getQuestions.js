@@ -8,6 +8,7 @@ export default async (req, res) => {
       .populate({
         path: 'questions',
         populate: {path: 'ownerQuestionerId', select: {name: 1}},
+        /* options: {sort: {likeCount: -1}}, */
       })
       .select({questions: 1});
 

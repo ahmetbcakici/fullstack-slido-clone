@@ -25,10 +25,7 @@ function AskToSpeaker({eventId}) {
         rows="10"
       ></textarea>
       <br />
-      <NameArea
-        anonFunc={handleSetIsAnon}
-        isAnon={isAnon}
-      />
+      <NameArea eventId={eventId} anonFunc={handleSetIsAnon} isAnon={isAnon} />
       <br />
       <button onClick={handleSendQuestion}>send</button>
     </div>

@@ -19,6 +19,11 @@ app.use(function (req, res, next) {
   next();
 });
 io.setMaxListeners(0);
+io.on('connection', (socket) => {
+  socket.on('joinEvent', (eventId) => {
+    socket.join(eventId);
+  });
+});
 
 dotenv.config();
 

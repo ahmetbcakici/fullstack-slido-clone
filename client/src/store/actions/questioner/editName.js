@@ -2,10 +2,11 @@ import axios from 'axios';
 
 import {API_URL} from '../../../config';
 
-export default ({questionerId, name}) => async (dispatch) =>
+export default ({eventId, questionerId, name}) => async (dispatch) =>
   new Promise(async (resolve, reject) => {
     try {
       const {data} = await axios.patch(`${API_URL}/questioner`, {
+        eventId,
         questionerId,
         name,
       });

@@ -1,8 +1,9 @@
 import React, {useEffect, useState, Fragment} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import {socket} from '../../config';
 import {compareValues} from '../../utils';
+import {API_URL} from '../../config';
 
 import {
   getQuestions,
@@ -15,30 +16,37 @@ function Questions({eventId}) {
   const [questionEdit, setQuestionEdit] = useState('');
   const [questions, setQuestions] = useState('');
   const [questionEditing, setQuestionEditing] = useState(false);
+  const [isPopularSelected, setIsPopularSelected] = useState(true);
   const questioner = useSelector((state) => state.questionerReducer);
 
   useEffect(() => {
     if (eventId) {
       handleGetQuestions();
-      console.log('hiır');
+      socket.emit('joinEvent', eventId);
 
-      socket.on('set-questions', async () => {
+      socket.on('set-questions', () => {
         console.log('socket on');
         handleGetQuestions();
       });
     }
   }, [eventId]);
 
-  const sortQuestions = (popularSelected = false) => {
-    if (popularSelected === true) {
-      const questionsSortedByPopularity = [...questions].sort(
+  useEffect(() => {
+    if (questions) sortQuestions(questions);
+    console.log(isPopularSelected);
+  }, [isPopularSelected]);
+
+  const sortQuestions = (questionsToSort) => {
+    console.log(isPopularSelected);
+    if (isPopularSelected === true) {
+      const questionsSortedByPopularity = [...questionsToSort].sort(
         compareValues('likeCount', 'desc')
       );
       setQuestions(questionsSortedByPopularity);
       return;
     }
 
-    const questionsSortedByRecent = [...questions].sort(
+    const questionsSortedByRecent = [...questionsToSort].sort(
       compareValues('generatedAt', 'desc')
     );
     setQuestions(questionsSortedByRecent);
@@ -47,7 +55,8 @@ function Questions({eventId}) {
   const handleGetQuestions = async () => {
     try {
       const {data} = await getQuestions({eventId});
-      setQuestions(data);
+      sortQuestions(data);
+      /* setQuestions(data); */
     } catch (error) {
       console.log(error);
     }
@@ -60,13 +69,13 @@ function Questions({eventId}) {
 
   const handleEditQuestion = (e) => {
     const questionId = e.target.parentElement.parentElement.id;
-    editQuestion({questionId, question: questionEdit});
+    editQuestion({eventId,questionId, question: questionEdit});
     setQuestionEditing(false);
   };
 
   const handleLikeQuestion = (e) => {
     const questionId = e.target.parentElement.id;
-    likeQuestion({questionId, questionerId: questioner._id});
+    likeQuestion({eventId, questionId, questionerId: questioner._id});
   };
 
   const renderQuestions = () => {
@@ -122,11 +131,8 @@ function Questions({eventId}) {
 
   return (
     <Fragment>
-      <p onClick={() => sortQuestions(true)}>popular</p>
-      <p onClick={sortQuestions}>recent</p>
-      <h1 onClick={() => console.log(questions)}>
-        click here to press console STATE
-      </h1>
+      <p onClick={() => setIsPopularSelected(true)}>popular</p>
+      <p onClick={() => setIsPopularSelected(false)}>recent</p>
       {renderQuestions()}
     </Fragment>
   );

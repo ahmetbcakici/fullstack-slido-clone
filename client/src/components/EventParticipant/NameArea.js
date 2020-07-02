@@ -3,7 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {editName} from '../../store/actions/questioner';
 
-function NameArea({anonFunc, isAnon}) {
+function NameArea({eventId, anonFunc, isAnon}) {
   const questioner = useSelector((state) => state.questionerReducer);
   const [isQuestionerAnon, setIsQuestionerAnon] = useState(false);
   const [nameEditing, setNameEditing] = useState(false);
@@ -27,7 +27,7 @@ function NameArea({anonFunc, isAnon}) {
   );
 
   const handleEditName = () => {
-    dispatch(editName({questionerId: questioner._id, name}));
+    dispatch(editName({eventId, questionerId: questioner._id, name}));
     setNameEditing(false);
   };
 
