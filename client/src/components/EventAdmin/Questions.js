@@ -1,5 +1,4 @@
 import React, {useEffect, useState, Fragment} from 'react';
-import {useSelector} from 'react-redux';
 
 import {socket} from '../../config';
 import {compareValues} from '../../utils';
@@ -7,16 +6,12 @@ import {compareValues} from '../../utils';
 import {
   getQuestions,
   deleteQuestion,
-  editQuestion,
-  likeQuestion,
+  highlightQuestion,
 } from '../../api/question';
 
 function Questions({eventId}) {
-  const [questionEdit, setQuestionEdit] = useState('');
   const [questions, setQuestions] = useState('');
-  const [questionEditing, setQuestionEditing] = useState(false);
   const [isPopularSelected, setIsPopularSelected] = useState(true);
-  const questioner = useSelector((state) => state.questionerReducer);
 
   useEffect(() => {
     if (eventId) {
@@ -63,18 +58,14 @@ function Questions({eventId}) {
 
   const handleDeleteQuestion = async (e) => {
     const questionId = e.target.parentElement.id;
-    deleteQuestion({eventId, questionerId: questioner._id, questionId});
+    const questionerId = e.target.parentElement.className;
+    deleteQuestion({eventId, questionerId, questionId});
   };
 
-  const handleEditQuestion = (e) => {
-    const questionId = e.target.parentElement.parentElement.id;
-    editQuestion({eventId, questionId, question: questionEdit});
-    setQuestionEditing(false);
-  };
-
-  const handleLikeQuestion = (e) => {
+  const handleHighlightQuestion = (e) => {
     const questionId = e.target.parentElement.id;
-    likeQuestion({eventId, questionId, questionerId: questioner._id});
+    const questionerId = e.target.parentElement.className;
+    highlightQuestion({eventId, questionerId, questionId});
   };
 
   const renderQuestions = () => {
@@ -89,39 +80,23 @@ function Questions({eventId}) {
           ownerQuestionerId,
           likeCount,
         }) => {
-          let isQuestionOwner = false;
-          if (ownerQuestionerId._id === questioner._id) isQuestionOwner = true;
           return (
-            <div key={_id} id={_id} style={{background: isHighlighted && 'tomato'}}>
+            <div
+              key={_id}
+              id={_id}
+              className={ownerQuestionerId._id}
+              style={{background: isHighlighted && 'tomato'}}
+            >
               <b>{isAnon ? 'Anon' : ownerQuestionerId.name}: </b>
               {question} <small>{generatedAt}</small>
               <br />
-              {isQuestionOwner && (
-                <span
-                  style={{color: 'red'}}
-                  onClick={() => setQuestionEditing(true)}
-                >
-                  edit
-                </span>
-              )}
-              |{' '}
-              {isQuestionOwner && (
-                <span style={{color: 'blue'}} onClick={handleDeleteQuestion}>
-                  delete
-                </span>
-              )}
-              |{' '}
-              <span style={{color: 'green'}} onClick={handleLikeQuestion}>
-                like {likeCount}
+              <span style={{color: 'blue'}} onClick={handleDeleteQuestion}>
+                delete
               </span>
-              <div  style={{display: !questionEditing && 'none'}}>
-                <input
-                  type="text"
-                  value={questionEdit}
-                  onChange={({target: {value}}) => setQuestionEdit(value)}
-                />
-                <button onClick={handleEditQuestion}>OK</button>
-              </div>
+              <span style={{color: 'red'}} onClick={handleHighlightQuestion}>
+                highlight
+              </span>
+              <span style={{color: 'green'}}>{likeCount}</span>
             </div>
           );
         }

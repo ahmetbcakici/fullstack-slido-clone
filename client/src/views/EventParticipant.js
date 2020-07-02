@@ -1,6 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {useDispatch, useSelector} from 'react-redux';
 
 import {
   AskToSpeaker,
@@ -17,12 +16,16 @@ function Event({
     params: {code},
   },
 }) {
+  const [isQuestionsSelected, setIsQuestionsSelected] = useState(true);
   const [eventId, setEventId] = useState('');
   const history = useHistory();
 
   useEffect(() => {
     findEventIdByCode();
   }, []);
+
+  const handleSetIsQuestionsSelected = (val) =>
+    setIsQuestionsSelected(val);
 
   const findEventIdByCode = async () => {
     try {
@@ -35,10 +38,17 @@ function Event({
 
   return (
     <Fragment>
-      <Navbar eventId={eventId} />
+      <Navbar
+        eventId={eventId}
+        handleSetIsQuestionsSelected={handleSetIsQuestionsSelected}
+      />
       {/* Sidebar */}
       <AskToSpeaker eventId={eventId} />
-      <Questions eventId={eventId} />
+      {isQuestionsSelected ? (
+        <Questions eventId={eventId} />
+      ) : (
+        <Polls eventId={eventId} />
+      )}
     </Fragment>
   );
 }

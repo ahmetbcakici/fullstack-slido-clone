@@ -5,7 +5,8 @@ import {
   editQuestion,
   sendQuestion,
   getQuestions,
-  likeQuestion
+  likeQuestion,
+  highlightQuestion
 } from '../../controllers/question';
 
 const router = express.Router();
@@ -15,5 +16,6 @@ router.post('/', sendQuestion);
 router.delete('/', deleteQuestion);
 router.patch('/', editQuestion);
 router.patch('/like', likeQuestion);
+router.patch('/highlight', highlightQuestion);
 
 export default router;

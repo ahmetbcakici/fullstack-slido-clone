@@ -10,6 +10,10 @@ const questionSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  isHighlighted: {
+    type: Boolean,
+    default: false,
+  },
   generatedAt: {
     type: Date,
     default: Date.now,

@@ -1,11 +1,11 @@
 import React from 'react'
 
-function Polls() {
+function Sidebar() {
     return (
         <div>
-            <h1>polls</h1>
+            
         </div>
     )
 }
 
-export default Polls
+export default Sidebar
