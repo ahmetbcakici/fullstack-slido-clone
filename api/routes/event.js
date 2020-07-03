@@ -3,7 +3,7 @@ import express from 'express';
 import {
   generateEvent,
   getEventId
-} from '../../controllers/event';
+} from '../controllers/event';
 
 const router = express.Router();
 

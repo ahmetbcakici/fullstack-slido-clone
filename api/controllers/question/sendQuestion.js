@@ -1,8 +1,6 @@
 import mongoose from 'mongoose';
 
-import Question from '../../models/question';
-import Questioner from '../../models/questioner';
-import Event from '../../models/event';
+import {Event, Question, Questioner} from '../../models';
 
 export default async (req, res) => {
   let {questionerId, eventId, question, isAnon} = req.body;

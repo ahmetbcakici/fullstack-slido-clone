@@ -1,7 +1,7 @@
-import Question from '../../models/question';
+import {Question} from '../../models';
 
 export default async (req, res) => {
-  const {eventId,questionId, question} = req.body;
+  const {eventId, questionId, question} = req.body;
 
   await Question.findByIdAndUpdate(questionId, {question});
 

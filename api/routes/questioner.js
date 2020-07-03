@@ -4,7 +4,7 @@ import {
   generateQuestioner,
   editName,
   getQuestioner,
-} from '../../controllers/questioner';
+} from '../controllers/questioner';
 
 const router = express.Router();
 

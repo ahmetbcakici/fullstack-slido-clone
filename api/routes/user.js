@@ -6,7 +6,7 @@ import {
   login,
   sendCodeToEmail,
   emailVerification,
-} from '../../controllers/user';
+} from '../controllers/user';
 
 const router = express.Router();
 

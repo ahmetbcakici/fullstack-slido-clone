@@ -7,7 +7,7 @@ import {
   getQuestions,
   likeQuestion,
   highlightQuestion
-} from '../../controllers/question';
+} from '../controllers/question';
 
 const router = express.Router();
 

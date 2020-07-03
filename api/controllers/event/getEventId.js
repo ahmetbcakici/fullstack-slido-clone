@@ -1,4 +1,4 @@
-import Event from '../../models/event';
+import {Event} from '../../models';
 
 export default async (req, res) => {
   const {eventCode} = req.params;

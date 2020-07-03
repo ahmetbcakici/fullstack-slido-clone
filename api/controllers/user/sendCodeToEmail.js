@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 import {generateRandom, sendCodeToVerifyEmail} from '../../utils';
 
-import User from '../../models/user';
+import {User} from '../../models';
 
 export default async (req, res) => {
   const {email} = req.body;

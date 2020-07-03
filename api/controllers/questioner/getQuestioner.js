@@ -1,4 +1,4 @@
-import Questioner from '../../models/questioner';
+import {Questioner} from '../../models';
 
 export default async (req, res) => {
   const {questionerId} = req.query;

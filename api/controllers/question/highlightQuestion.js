@@ -1,4 +1,4 @@
-import Question from '../../models/question';
+import {Question} from '../../models';
 
 export default async (req, res) => {
   const {eventId, questionId, questionerId} = req.body;
@@ -24,10 +24,3 @@ export default async (req, res) => {
   res.io.to(eventId).emit('set-questions');
   res.send();
 };
-
-/* 
-eventId de mevcut question idleri bul ve bunların arasından isHighlited ı control et ve sıfırla
-
-
-questionsları tara aynı event olanları grupla ve bunların arasından # # #
-*/

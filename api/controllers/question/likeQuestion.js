@@ -1,4 +1,4 @@
-import Question from '../../models/question';
+import {Question} from '../../models';
 
 export default async (req, res) => {
   const {eventId, questionId, questionerId} = req.body;
