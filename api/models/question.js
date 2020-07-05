@@ -5,7 +5,10 @@ const questionSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   ownerQuestionerId: {type: mongoose.Schema.Types.ObjectId, ref: 'Questioner'},
   eventId: {type: mongoose.Schema.Types.ObjectId, ref: 'Event'},
-  question: String,
+  question: {
+    type: String,
+    required: true,
+  },
   isAnon: {
     type: Boolean,
     default: false,
