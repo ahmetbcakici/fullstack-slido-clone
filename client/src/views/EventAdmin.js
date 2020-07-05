@@ -1,7 +1,12 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 
-import {LatestQuestion, Questions, Sidebar} from '../components/EventAdmin';
+import {
+  LatestQuestion,
+  Questions,
+  Sidebar,
+  Stick,
+} from '../components/EventAdmin';
 
 import {getEventId} from '../api/event';
 
@@ -34,6 +39,7 @@ function EventAdmin({
       <Sidebar />
       <Questions eventId={eventId} />
       <LatestQuestion eventId={eventId} />
+      <Stick />
     </Fragment>
   );
 }
