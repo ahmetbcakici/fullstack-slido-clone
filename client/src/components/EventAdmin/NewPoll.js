@@ -4,12 +4,14 @@ import Dropdown from 'react-dropdown';
 
 import 'react-dropdown/style.css';
 import {modalStyles} from '../../config';
+import {generatePoll} from '../../api/poll';
 
 Modal.setAppElement('#root');
-function NewPoll() {
+function NewPoll({eventId}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalIsOpen, setIsOpen] = useState(false);
   const [selectedForm, setSelectedForm] = useState('');
+  const [question, setQuestion] = useState('');
+  const [options, setOptions] = useState(['', '']);
   const pollOptions = [
     'Multiple Choice',
     'Open Text',
@@ -18,48 +20,87 @@ function NewPoll() {
     'Quiz',
   ];
 
+  const onOptionsChanged = (e) => {
+    let tempOptions = [...options];
+    tempOptions[e.target.id] = e.target.value;
+    setOptions(tempOptions);
+  };
+
+  const handleGeneratePoll = (e) => {
+    e.preventDefault();
+    generatePoll({eventId, question, options,type: selectedForm});
+  };
+
   const multipleChoiceForm = () => (
-    <form>
-      <input type="text" placeholder="question" />
+    <form onSubmit={handleGeneratePoll}>
+      <input
+        type="text"
+        placeholder="question"
+        value={question}
+        onChange={({target: {value}}) => setQuestion(value)}
+      />
+
       <ul>
-        <li>
-          <input type="text" placeholder="add option" />
-        </li>
-        <li>
-          <input type="text" placeholder="add option" />
-        </li>
-        <li>
-          <input type="text" placeholder="add option" />
-        </li>
+        {options.map((option, index) => (
+          <li key={index}>
+            <input
+              type="text"
+              placeholder="add option"
+              id={index}
+              value={option}
+              onChange={onOptionsChanged}
+            />
+          </li>
+        ))}
       </ul>
       <input type="submit" value="START" />
     </form>
   );
 
   const openTextForm = () => (
-    <form>
-      <input type="text" placeholder="question" />
+    <form onSubmit={handleGeneratePoll}>
+      <input
+        type="text"
+        placeholder="question"
+        value={question}
+        onChange={({target: {value}}) => setQuestion(value)}
+      />
       <input type="submit" value="START" />
     </form>
   );
 
   const wordCloudForm = () => (
-    <form>
-      <input type="text" placeholder="question" />
+    <form onSubmit={handleGeneratePoll}>
+      <input
+        type="text"
+        placeholder="question"
+        value={question}
+        onChange={({target: {value}}) => setQuestion(value)}
+      />
       <input type="submit" value="START" />
     </form>
   );
 
   const ratingForm = () => (
-    <form>
-      <input type="text" placeholder="question" />
+    <form onSubmit={handleGeneratePoll}>
+      <input
+        type="text"
+        placeholder="question"
+        value={question}
+        onChange={({target: {value}}) => setQuestion(value)}
+      />
       <input type="submit" value="START" />
     </form>
   );
 
   const quizForm = () => (
-    <form>
-      <input type="text" placeholder="question" />
+    <form onSubmit={handleGeneratePoll}>
+      <input
+        type="text"
+        placeholder="question"
+        value={question}
+        onChange={({target: {value}}) => setQuestion(value)}
+      />
       <ul>
         <li>
           <input type="radio" name="correct" />

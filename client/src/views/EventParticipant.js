@@ -16,7 +16,7 @@ function Event({
     params: {code},
   },
 }) {
-  const [isQuestionsSelected, setIsQuestionsSelected] = useState(true);
+  const [isQuestionsSelected, setIsQuestionsSelected] = useState(false);
   const [eventId, setEventId] = useState('');
   const history = useHistory();
 
@@ -24,8 +24,7 @@ function Event({
     findEventIdByCode();
   }, []);
 
-  const handleSetIsQuestionsSelected = (val) =>
-    setIsQuestionsSelected(val);
+  const handleSetIsQuestionsSelected = (val) => setIsQuestionsSelected(val);
 
   const findEventIdByCode = async () => {
     try {
@@ -43,9 +42,11 @@ function Event({
         handleSetIsQuestionsSelected={handleSetIsQuestionsSelected}
       />
       {/* Sidebar */}
-      <AskToSpeaker eventId={eventId} />
       {isQuestionsSelected ? (
-        <Questions eventId={eventId} />
+        <Fragment>
+          <AskToSpeaker eventId={eventId} />
+          <Questions eventId={eventId} />
+        </Fragment>
       ) : (
         <Polls eventId={eventId} />
       )}

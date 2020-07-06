@@ -15,7 +15,7 @@ function EventAdmin({
     params: {code},
   },
 }) {
-  const [isQuestionsSelected, setIsQuestionsSelected] = useState(true);
+  const [isQuestionsSelected, setIsQuestionsSelected] = useState(false);
   const [eventId, setEventId] = useState('');
   const history = useHistory();
 
@@ -37,9 +37,14 @@ function EventAdmin({
   return (
     <Fragment>
       <Sidebar />
-      <Questions eventId={eventId} />
-      <LatestQuestion eventId={eventId} />
-      <Stick />
+      {isQuestionsSelected ? (
+        <Fragment>
+          <Questions eventId={eventId} />
+          <LatestQuestion eventId={eventId} />
+        </Fragment>
+      ) : (
+        <Stick eventId={eventId} />
+      )}
     </Fragment>
   );
 }

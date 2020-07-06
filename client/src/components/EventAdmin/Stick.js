@@ -1,14 +1,13 @@
 import React from 'react';
 
-import NewPoll from './NewPoll'
-import PollList from './PollList'
+import NewPoll from './NewPoll';
+import PollList from './PollList';
 
-function Stick() {
+function Stick({eventId}) {
   return (
     <div>
-      <NewPoll/>
-      <PollList/>
-      
+      <NewPoll eventId={eventId} />
+      <PollList eventId={eventId} />
 
       <button>lock voting</button>
       <button>hide results</button>

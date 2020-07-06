@@ -7,15 +7,20 @@ const optionsSchema = new Schema({
     type: String,
     required: true,
   },
+  isCorrect: {
+    type: Boolean,
+    default: false,
+  },
   selectCount: {
     type: Number,
     default: 0,
   },
-  selectedQuestionersId: [
-    {
+  questionersSelected: [
+    String,
+    /* {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Questioner',
-    },
+    }, */
   ],
 });
 const answerSchema = new Schema({
@@ -34,6 +39,10 @@ const pollSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
   question: {
     type: String,
     required: true,
@@ -41,7 +50,7 @@ const pollSchema = new Schema({
   options: [optionsSchema],
   type: {
     type: String,
-    enum: ['MULTIPLE-CHOICE', 'OPEN-TEXT', 'WORD-CLOUD', 'RATING', 'QUIZ'],
+    enum: ['Multiple Choice', 'Open Text', 'Word Cloud', 'Rating', 'Quiz'],
     default: 'MULTIPLE-CHOICE',
   },
   answer: [answerSchema],

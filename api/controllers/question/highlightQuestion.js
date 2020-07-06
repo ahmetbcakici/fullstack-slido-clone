@@ -14,7 +14,7 @@ export default async (req, res) => {
   }
 
   // cancel other highlights for this event questions
-  await Question.findOneAndUpdate(
+  await Question.updateOne(
     {eventId, isHighlighted: true},
     {isHighlighted: false}
   );
