@@ -23,7 +23,7 @@ const optionsSchema = new Schema({
     }, */
   ],
 });
-const answerSchema = new Schema({
+const answersSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   answer: String,
   ownerQuestionerId: {
@@ -53,7 +53,7 @@ const pollSchema = new Schema({
     enum: ['Multiple Choice', 'Open Text', 'Word Cloud', 'Rating', 'Quiz'],
     default: 'MULTIPLE-CHOICE',
   },
-  answer: [answerSchema],
+  answers: [answersSchema],
 });
 
 const Poll = model('Poll', pollSchema);

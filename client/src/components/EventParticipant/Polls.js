@@ -27,7 +27,7 @@ function Polls({eventId}) {
     try {
       const {data} = await getActivePoll({eventId});
 
-      const currentAnswer = data.answer.find(
+      const currentAnswer = data.answers.find(
         (answer) => answer.ownerQuestionerId === questioner._id
       );
       if (currentAnswer) setCurrentAnswer(currentAnswer);

@@ -8,12 +8,12 @@ export default async (req, res) => {
   const poll = await Poll.findById(pollId);
 
   // if there is already answer, delete it
-  const currentAnswer = poll.answer.find(
+  const currentAnswer = poll.answers.find(
     (answer) => answer.ownerQuestionerId == ownerQuestionerId
   );
-  if (currentAnswer) poll.answer.remove(currentAnswer);
+  if (currentAnswer) poll.answers.remove(currentAnswer);
 
-  poll.answer.push({
+  poll.answers.push({
     _id: mongoose.Types.ObjectId(),
     answer,
     ownerQuestionerId,
