@@ -1,2 +1,2 @@
 export {default as userReducer} from './user';
-export {default as questionerReducer} from './questioner';
+export {default as participantReducer} from './participant';

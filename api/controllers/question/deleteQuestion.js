@@ -1,17 +1,17 @@
-import {Event, Question, Questioner} from '../../models';
+import {Event, Question, Participant} from '../../models';
 
 export default async (req, res) => {
-  const {eventId, questionerId, questionId} = req.body;
+  const {eventId, participantId, questionId} = req.body;
 
   const event = await Event.findById(eventId).select({questions: 1});
   event.questions.remove(questionId);
   event.save();
 
-  const questioner = await Questioner.findById(questionerId).select({
+  const participant = await Participant.findById(participantId).select({
     questions: 1,
   });
-  questioner.questions.remove(questionId);
-  questioner.save();
+  participant.questions.remove(questionId);
+  participant.save();
 
   await Question.findByIdAndDelete(questionId);
 

@@ -1,16 +1,16 @@
 import {Question} from '../../models';
 
 export default async (req, res) => {
-  const {eventId, questionId, questionerId} = req.body;
+  const {eventId, questionId, participantId} = req.body;
 
   const question = await Question.findById(questionId);
 
-  const likeControl = question.questionersLiked.includes(questionerId);
+  const likeControl = question.participantsLiked.includes(participantId);
 
   if (likeControl) {
     // liked already, so unlike
     question.likeCount = question.likeCount - 1;
-    question.questionersLiked.remove(questionerId);
+    question.participantsLiked.remove(participantId);
     question.save();
 
     res.io.to(eventId).emit('set-questions');
@@ -20,7 +20,7 @@ export default async (req, res) => {
   // like
 
   question.likeCount = question.likeCount + 1;
-  question.questionersLiked.push(questionerId);
+  question.participantsLiked.push(participantId);
   question.save();
 
   res.io.to(eventId).emit('set-questions');

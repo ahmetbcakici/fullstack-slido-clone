@@ -6,13 +6,13 @@ import {socket} from '../../config';
 import {getActivePoll, sendAnswer} from '../../api/poll';
 
 function Polls({eventId}) {
-  const questioner = useSelector((state) => state.questionerReducer);
+  const participant = useSelector((state) => state.participantReducer);
   const [activePoll, setActivePoll] = useState('');
   const [answer, setAnswer] = useState('');
   const [currentAnswer, setCurrentAnswer] = useState(undefined);
 
   useEffect(() => {
-    if (eventId && questioner) {
+    if (eventId && participant) {
       handleGetActivePoll();
       socket.emit('joinEvent', eventId);
 
@@ -21,14 +21,14 @@ function Polls({eventId}) {
         handleGetActivePoll();
       });
     }
-  }, [eventId,questioner]);
+  }, [eventId,participant]);
 
   const handleGetActivePoll = async () => {
     try {
       const {data} = await getActivePoll({eventId});
 
       const currentAnswer = data.answers.find(
-        (answer) => answer.ownerQuestionerId === questioner._id
+        (answer) => answer.ownerParticipantId === participant._id
       );
       if (currentAnswer) setCurrentAnswer(currentAnswer);
 
@@ -43,7 +43,7 @@ function Polls({eventId}) {
     await sendAnswer({
       pollId: activePoll._id,
       answer,
-      ownerQuestionerId: questioner._id,
+      ownerParticipantId: participant._id,
     });
     handleGetActivePoll();
   };

@@ -7,12 +7,12 @@ import {sendQuestion} from '../../api/question';
 function AskToSpeaker({eventId}) {
   const [question, setQuestion] = useState('');
   const [isAnon, setIsAnon] = useState(false);
-  const questioner = useSelector((state) => state.questionerReducer);
+  const participant = useSelector((state) => state.participantReducer);
 
   const handleSetIsAnon = () => setIsAnon(!isAnon);
 
   const handleSendQuestion = () => {
-    sendQuestion({questionerId: questioner._id, eventId, question, isAnon});
+    sendQuestion({participantId: participant._id, eventId, question, isAnon});
   };
 
   return (

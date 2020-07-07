@@ -1,13 +1,13 @@
-import {Questioner} from '../../models';
+import {Participant} from '../../models';
 
 export default async (req, res) => {
-  const {eventId, questionerId, name: newName} = req.body;
+  const {eventId, participantId, name: newName} = req.body;
 
-  if (!questionerId || !newName)
+  if (!participantId || !newName)
     return res.status(400).send('Fill all fields.');
 
-  const {_id, name} = await Questioner.findByIdAndUpdate(
-    questionerId,
+  const {_id, name} = await Participant.findByIdAndUpdate(
+    participantId,
     {
       name: newName,
     },

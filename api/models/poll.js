@@ -15,20 +15,20 @@ const optionsSchema = new Schema({
     type: Number,
     default: 0,
   },
-  questionersSelected: [
+  participantsSelected: [
     String,
     /* {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Questioner',
+      ref: 'Participant',
     }, */
   ],
 });
 const answersSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   answer: String,
-  ownerQuestionerId: {
+  ownerParticipantId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Questioner',
+    ref: 'Participant',
   },
 });
 

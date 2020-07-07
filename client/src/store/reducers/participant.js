@@ -1,12 +1,12 @@
-const questioner = (state = null, action) => {
+const participant = (state = null, action) => {
   const {type, payload} = action;
 
   switch (type) {
-    case 'SET_QUESTIONER':
+    case 'SET_PARTICIPANT':
       return payload;
     default:
       return state;
   }
 };
 
-export default questioner;
+export default participant;

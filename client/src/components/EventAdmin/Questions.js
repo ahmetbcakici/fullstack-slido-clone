@@ -58,14 +58,14 @@ function Questions({eventId}) {
 
   const handleDeleteQuestion = async (e) => {
     const questionId = e.target.parentElement.id;
-    const questionerId = e.target.parentElement.className;
-    deleteQuestion({eventId, questionerId, questionId});
+    const participantId = e.target.parentElement.className;
+    deleteQuestion({eventId, participantId, questionId});
   };
 
   const handleHighlightQuestion = (e) => {
     const questionId = e.target.parentElement.id;
-    const questionerId = e.target.parentElement.className;
-    highlightQuestion({eventId, questionerId, questionId});
+    const participantId = e.target.parentElement.className;
+    highlightQuestion({eventId, participantId, questionId});
   };
 
   const renderQuestions = () => {
@@ -77,17 +77,17 @@ function Questions({eventId}) {
           generatedAt,
           isAnon,
           isHighlighted,
-          ownerQuestionerId,
+          ownerParticipantId,
           likeCount,
         }) => {
           return (
             <div
               key={_id}
               id={_id}
-              className={ownerQuestionerId._id}
+              className={ownerParticipantId._id}
               style={{background: isHighlighted && 'tomato'}}
             >
-              <b>{isAnon ? 'Anon' : ownerQuestionerId.name}: </b>
+              <b>{isAnon ? 'Anon' : ownerParticipantId.name}: </b>
               {question} <small>{generatedAt}</small>
               <br />
               <span style={{color: 'blue'}} onClick={handleDeleteQuestion}>

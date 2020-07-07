@@ -8,15 +8,15 @@ import EventAdmin from './views/EventAdmin';
 import Account from './views/Account';
 import Admin from './views/Admin';
 import Page404 from './views/404';
-import Questioner from './views/Questioner';
+import Participant from './views/Participant';
 
 import {auth} from './store/actions/user';
-import {generateQuestioner, getQuestioner} from './store/actions/questioner';
+import {generateParticipant, getParticipant} from './store/actions/participant';
 
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userReducer);
-  const questioner = useSelector((state) => state.questionerReducer);
+  const participant = useSelector((state) => state.participantReducer);
 
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
@@ -27,25 +27,25 @@ function App() {
   }, [auth, dispatch]);
 
   useEffect(() => {
-    const questionerId = localStorage.getItem('questionerId');
+    const participantId = localStorage.getItem('participantId');
 
     (async function () {
-      if (!questionerId) {
-        const {_id} = await dispatch(generateQuestioner());
-        localStorage.setItem('questionerId', _id);
+      if (!participantId) {
+        const {_id} = await dispatch(generateParticipant());
+        localStorage.setItem('participantId', _id);
         return;
       }
 
-      dispatch(getQuestioner({questionerId}));
+      dispatch(getParticipant({participantId}));
     })();
-  }, [generateQuestioner, dispatch]);
+  }, [generateParticipant, dispatch]);
 
   return (
     <Router>
       <Switch>
         <Route path="/" component={Welcome} exact />
         <Route path="/account" component={user ? Admin : Account} exact />
-        <Route path="/questioner" component={Questioner} exact />
+        <Route path="/participant" component={Participant} exact />
         <Route path="/event/:code" component={EventParticipant} exact />
         <Route path="/event-admin/:code" component={EventAdmin} exact />
         <Route path="/*" component={Page404} exact />

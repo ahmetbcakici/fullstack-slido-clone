@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const {Schema, model} = mongoose;
 
-const questionerSchema = new Schema({
+const participantSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   name: {
     type: String,
@@ -13,5 +13,5 @@ const questionerSchema = new Schema({
   likedQuestions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Question'}],
 });
 
-const Questioner = model('Questioner', questionerSchema);
-export default Questioner;
+const Participant = model('Participant', participantSchema);
+export default Participant;

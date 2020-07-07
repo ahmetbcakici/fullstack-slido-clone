@@ -6,7 +6,7 @@ export default async (req, res) => {
     const {questions} = await Event.findById(eventId)
       .populate({
         path: 'questions',
-        populate: {path: 'ownerQuestionerId', select: {name: 1}},
+        populate: {path: 'ownerParticipantId', select: {name: 1}},
         /* options: {sort: {likeCount: -1}}, */
       })
       .select({questions: 1});

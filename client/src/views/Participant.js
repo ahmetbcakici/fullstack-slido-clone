@@ -1,6 +1,6 @@
 import React, {Fragment, useState, useEffect} from 'react';
 
-function Questioner() {
+function Participant() {
   useEffect(() => {
     /* getQuestioner({questionerId:1}).then((res) => console.log(res.data)); */
   }, []);
@@ -19,4 +19,4 @@ function Questioner() {
   );
 }
 
-export default Questioner;
+export default Participant;

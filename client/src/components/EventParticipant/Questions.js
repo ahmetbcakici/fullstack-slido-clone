@@ -16,7 +16,7 @@ function Questions({eventId}) {
   const [questions, setQuestions] = useState('');
   const [questionEditing, setQuestionEditing] = useState(false);
   const [isPopularSelected, setIsPopularSelected] = useState(true);
-  const questioner = useSelector((state) => state.questionerReducer);
+  const participant = useSelector((state) => state.participantReducer);
 
   useEffect(() => {
     if (eventId) {
@@ -63,7 +63,7 @@ function Questions({eventId}) {
 
   const handleDeleteQuestion = async (e) => {
     const questionId = e.target.parentElement.id;
-    deleteQuestion({eventId, questionerId: questioner._id, questionId});
+    deleteQuestion({eventId, participantId: participant._id, questionId});
   };
 
   const handleEditQuestion = (e) => {
@@ -74,7 +74,7 @@ function Questions({eventId}) {
 
   const handleLikeQuestion = (e) => {
     const questionId = e.target.parentElement.id;
-    likeQuestion({eventId, questionId, questionerId: questioner._id});
+    likeQuestion({eventId, questionId, participantId: participant._id});
   };
 
   const renderQuestions = () => {
@@ -86,14 +86,14 @@ function Questions({eventId}) {
           generatedAt,
           isAnon,
           isHighlighted,
-          ownerQuestionerId,
+          ownerParticipantId,
           likeCount,
         }) => {
           let isQuestionOwner = false;
-          if (ownerQuestionerId._id === questioner._id) isQuestionOwner = true;
+          if (ownerParticipantId._id === participant._id) isQuestionOwner = true;
           return (
             <div key={_id} id={_id} style={{background: isHighlighted && 'tomato'}}>
-              <b>{isAnon ? 'Anon' : ownerQuestionerId.name}: </b>
+              <b>{isAnon ? 'Anon' : ownerParticipantId.name}: </b>
               {question} <small>{generatedAt}</small>
               <br />
               {isQuestionOwner && (
