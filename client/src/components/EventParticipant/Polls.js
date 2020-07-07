@@ -3,41 +3,60 @@ import {useSelector} from 'react-redux';
 
 import {socket} from '../../config';
 
-import {getActivePoll} from '../../api/poll';
+import {getActivePoll, sendAnswer} from '../../api/poll';
 
 function Polls({eventId}) {
   const questioner = useSelector((state) => state.questionerReducer);
   const [activePoll, setActivePoll] = useState('');
   const [answer, setAnswer] = useState('');
+  const [currentAnswer, setCurrentAnswer] = useState(undefined);
 
   useEffect(() => {
-    if (eventId) {
+    if (eventId && questioner) {
       handleGetActivePoll();
       socket.emit('joinEvent', eventId);
-        console.log('qola')
+
       socket.on('get-active-poll', () => {
         console.log('socket on');
         handleGetActivePoll();
       });
     }
-  }, [eventId]);
+  }, [eventId,questioner]);
 
   const handleGetActivePoll = async () => {
     try {
       const {data} = await getActivePoll({eventId});
-      console.log(data);
+
+      const currentAnswer = data.answer.find(
+        (answer) => answer.ownerQuestionerId === questioner._id
+      );
+      if (currentAnswer) setCurrentAnswer(currentAnswer);
+
       setActivePoll(data);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleSubmitAnswer = async (e) => {
+    e.preventDefault();
+    await sendAnswer({
+      pollId: activePoll._id,
+      answer,
+      ownerQuestionerId: questioner._id,
+    });
+    handleGetActivePoll();
+  };
+
   const stringForm = () => (
-    <input
-      type="text"
-      value={answer}
-      onChange={({target: {value}}) => setAnswer(value)}
-    />
+    <form onSubmit={handleSubmitAnswer}>
+      <input
+        type="text"
+        value={answer}
+        onChange={({target: {value}}) => setAnswer(value)}
+      />
+      <input type="submit" value="SEND" />
+    </form>
   );
 
   const optionalForm = () => <input type="text" />;
@@ -76,6 +95,7 @@ function Polls({eventId}) {
     <Fragment>
       {question}
       {renderForm()}
+      {currentAnswer && (<p>{currentAnswer.answer}</p>)}
     </Fragment>
   );
 }
