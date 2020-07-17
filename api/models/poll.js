@@ -11,10 +11,6 @@ const optionsSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  selectCount: {
-    type: Number,
-    default: 0,
-  },
   participantsSelected: [
     String,
     /* {

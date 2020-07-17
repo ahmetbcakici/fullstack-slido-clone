@@ -3,7 +3,7 @@ import React from 'react';
 import NewPoll from './NewPoll';
 import PollList from './PollList';
 
-function Stick({eventId}) {
+function Stick({eventId,handleSetIsQuestionsSelected}) {
   return (
     <div>
       <NewPoll eventId={eventId} />
@@ -12,7 +12,7 @@ function Stick({eventId}) {
       <button>lock voting</button>
       <button>hide results</button>
       <br />
-      <button>show Q&A (or polls)</button>
+      <button onClick={handleSetIsQuestionsSelected}>show Q&A (or polls)</button>
 
       <p>
         <b>settings</b>

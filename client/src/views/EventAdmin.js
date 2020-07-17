@@ -9,6 +9,7 @@ import {
 } from '../components/EventAdmin';
 
 import {getEventId} from '../api/event';
+import PollAnswers from '../components/EventAdmin/PollAnswers';
 
 function EventAdmin({
   match: {
@@ -23,7 +24,13 @@ function EventAdmin({
     findEventIdByCode();
   }, []);
 
-  const handleSetIsQuestionsSelected = (val) => setIsQuestionsSelected(val);
+  const handleSetIsQuestionsSelected = (val) => {
+    if (val !== true && val !== false) {
+      setIsQuestionsSelected(!isQuestionsSelected);
+      return;
+    }
+    setIsQuestionsSelected(val);
+  };
 
   const findEventIdByCode = async () => {
     try {
@@ -43,8 +50,12 @@ function EventAdmin({
           <LatestQuestion eventId={eventId} />
         </Fragment>
       ) : (
-        <Stick eventId={eventId} />
+        <PollAnswers eventId={eventId} />
       )}
+      <Stick
+        eventId={eventId}
+        handleSetIsQuestionsSelected={handleSetIsQuestionsSelected}
+      />
     </Fragment>
   );
 }

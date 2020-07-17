@@ -9,7 +9,10 @@ export default async (req, res) => {
   await Poll.updateMany({eventId, isActive: true}, {isActive: false});
 
   if (type === 'Multiple Choice' || type === 'Quiz') {
-    req.body.options = options.map((option) => ({option}));
+    req.body.options = options.map((option) => ({
+      _id: mongoose.Types.ObjectId(),
+      option,
+    }));
     const pollGenerated = await Poll.create({
       _id: mongoose.Types.ObjectId(),
       ...req.body,

@@ -9,7 +9,10 @@ function Polls({eventId}) {
   const participant = useSelector((state) => state.participantReducer);
   const [activePoll, setActivePoll] = useState('');
   const [answer, setAnswer] = useState('');
+  const [isAnswerEditing, setIsAnswerEditing] = useState(false);
   const [currentAnswer, setCurrentAnswer] = useState(undefined);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const {question, answers, type, options} = activePoll;
 
   useEffect(() => {
     if (eventId && participant) {
@@ -21,7 +24,19 @@ function Polls({eventId}) {
         handleGetActivePoll();
       });
     }
-  }, [eventId,participant]);
+  }, [eventId, participant]);
+
+  const onOptionsSelected = (e) => {
+    let tempSelectedOptions = [...selectedOptions];
+    const existCheck = tempSelectedOptions.find((item) => item == e.target.id);
+    if (existCheck) {
+      tempSelectedOptions = tempSelectedOptions.filter(item => item != existCheck);
+      setSelectedOptions(tempSelectedOptions);
+      return;
+    }
+    tempSelectedOptions.push(e.target.id);
+    setSelectedOptions(tempSelectedOptions);
+  };
 
   const handleGetActivePoll = async () => {
     try {
@@ -30,9 +45,14 @@ function Polls({eventId}) {
       const currentAnswer = data.answers.find(
         (answer) => answer.ownerParticipantId === participant._id
       );
-      if (currentAnswer) setCurrentAnswer(currentAnswer);
 
       setActivePoll(data);
+
+      if (currentAnswer) {
+        setCurrentAnswer(currentAnswer);
+        return;
+      }
+      setCurrentAnswer(undefined);
     } catch (error) {
       console.log(error);
     }
@@ -41,10 +61,14 @@ function Polls({eventId}) {
   const handleSubmitAnswer = async (e) => {
     e.preventDefault();
     await sendAnswer({
+      eventId,
       pollId: activePoll._id,
+      type: activePoll.type,
       answer,
+      options:selectedOptions,
       ownerParticipantId: participant._id,
     });
+    setIsAnswerEditing(false);
     handleGetActivePoll();
   };
 
@@ -52,6 +76,7 @@ function Polls({eventId}) {
     <form onSubmit={handleSubmitAnswer}>
       <input
         type="text"
+        placeholder={currentAnswer && currentAnswer.answer}
         value={answer}
         onChange={({target: {value}}) => setAnswer(value)}
       />
@@ -59,43 +84,65 @@ function Polls({eventId}) {
     </form>
   );
 
-  const optionalForm = () => <input type="text" />;
+  const multipleChoiceForm = () => (
+    <form onSubmit={handleSubmitAnswer}>
+      {options &&
+        options.map(({_id, option}) => (
+          <Fragment key={_id}>
+            <input
+              type="checkbox"
+              id={_id}
+              key={_id}
+              onClick={onOptionsSelected}
+            />
+            <label htmlFor={_id}>{option}</label>
+            <br />
+          </Fragment>
+        ))}
+      <input type="submit" value="SUBMIT" />
+    </form>
+  );
 
   const renderForm = () => {
-    switch (activePoll.type) {
+    switch (type) {
       case 'Multiple Choice':
-        return optionalForm();
+        return multipleChoiceForm();
       case 'Open Text':
       case 'Word Cloud':
         return stringForm();
       default:
-        return optionalForm();
+        return <p>boş</p>;
     }
   };
 
-  /* 
-  const handleDeleteQuestion = async (e) => {
-    const questionId = e.target.parentElement.id;
-    deleteQuestion({eventId, questionerId: questioner._id, questionId});
-  };
-
-  const handleEditQuestion = (e) => {
-    const questionId = e.target.parentElement.parentElement.id;
-    editQuestion({eventId, questionId, question: questionEdit});
-    setQuestionEditing(false);
-  };
-
-  const handleLikeQuestion = (e) => {
-    const questionId = e.target.parentElement.id;
-    likeQuestion({eventId, questionId, questionerId: questioner._id});
-  }; */
-
-  const {question} = activePoll;
   return (
     <Fragment>
       {question}
-      {renderForm()}
-      {currentAnswer && (<p>{currentAnswer.answer}</p>)}
+
+      {currentAnswer && !isAnswerEditing ? (
+        <ul>
+          {answers &&
+            answers.map(({_id, answer}) => {
+              if (currentAnswer._id == _id) {
+                return (
+                  <li key={_id} style={{color: 'blue'}}>
+                    {answer}{' '}
+                    <b
+                      style={{color: 'black'}}
+                      onClick={() => setIsAnswerEditing(true)}
+                    >
+                      edit
+                    </b>
+                  </li>
+                );
+              }
+
+              return <li>{answer}</li>;
+            })}
+        </ul>
+      ) : (
+        renderForm()
+      )}
     </Fragment>
   );
 }
