@@ -4,3 +4,4 @@ export {default as getActivePoll} from './getActivePoll';
 export {default as getPollsByEvent} from './getPollsByEvent';
 export {default as setActiveState} from './setActiveState';
 export {default as deletePoll} from './deletePoll';
+export {default as resetPollResults} from './resetPollResults';
