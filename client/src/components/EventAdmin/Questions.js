@@ -16,7 +16,6 @@ function Questions({eventId}) {
   useEffect(() => {
     if (eventId) {
       handleGetQuestions();
-      socket.emit('joinEvent', eventId);
 
       socket.on('set-questions', () => {
         console.log('socket on');

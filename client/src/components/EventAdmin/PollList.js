@@ -1,5 +1,5 @@
 import React, {useState, useEffect, Fragment} from 'react';
-import {getPollsByEvent, setActiveState} from '../../api/poll';
+import {getPollsByEvent, setActiveState, deletePoll} from '../../api/poll';
 
 import {socket} from '../../config';
 
@@ -20,8 +20,8 @@ function PollList({eventId}) {
   const handleGetPolls = async () => {
     try {
       const {data} = await getPollsByEvent({eventId});
-      console.log('data.data')
-      console.log(data)
+      console.log('data.data');
+      console.log(data);
       setPolls(data);
     } catch (error) {
       console.log(error);
@@ -33,6 +33,15 @@ function PollList({eventId}) {
       const pollId = e.target.parentElement.id;
       const {data} = await setActiveState({eventId, pollId});
       setPolls(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDeletePoll = async (e) => {
+    try {
+      const pollId = e.target.parentElement.id;
+      await deletePoll({eventId, pollId});
     } catch (error) {
       console.log(error);
     }
@@ -56,7 +65,9 @@ function PollList({eventId}) {
                 <span style={{color: 'blue'}}>edit</span>{' '}
                 <span style={{color: 'green'}}>duplicate</span>{' '}
                 <span style={{color: 'gold'}}>reset results</span>{' '}
-                <span style={{color: 'tomato'}}>delete</span>
+                <span style={{color: 'tomato'}} onClick={handleDeletePoll}>
+                  delete
+                </span>
               </li>
             );
           })}

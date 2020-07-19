@@ -10,7 +10,6 @@ function PollResults({eventId}) {
   useEffect(() => {
     if (eventId) {
       handleGetActivePoll();
-      socket.emit('joinEvent', eventId);
 
       socket.on('get-active-poll', () => {
         console.log('socket on');

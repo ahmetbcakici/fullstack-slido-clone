@@ -17,7 +17,7 @@ function PollResults({eventId, setIsAnswerEditing}) {
   useEffect(() => {
     if (eventId && participant) {
       handleGetActivePoll();
-      socket.emit('joinEvent', eventId);
+      /* socket.emit('joinEvent', eventId); */
 
       socket.on('get-active-poll', () => {
         console.log('socket on');

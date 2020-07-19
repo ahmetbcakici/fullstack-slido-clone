@@ -5,7 +5,8 @@ import {
   sendAnswer,
   getActivePoll,
   getPollsByEvent,
-  setActiveState
+  setActiveState,
+  deletePoll
 } from '../controllers/poll';
 
 const router = express.Router();
@@ -15,5 +16,6 @@ router.get('/active', getActivePoll);
 router.post('/', generatePoll);
 router.post('/answer', sendAnswer);
 router.patch('/set-active', setActiveState);
+router.delete('/', deletePoll);
 
 export default router;

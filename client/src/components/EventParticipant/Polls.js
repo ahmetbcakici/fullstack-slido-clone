@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 
 import {socket} from '../../config';
 
-import {getActivePoll, sendAnswer} from '../../api/poll';
+import {getActivePoll, sendAnswer, setActiveState} from '../../api/poll';
 import PollResults from '../EventParticipant/PollResults';
 
 function Polls({eventId}) {
@@ -19,7 +19,7 @@ function Polls({eventId}) {
   useEffect(() => {
     if (eventId && participant) {
       handleGetActivePoll();
-      socket.emit('joinEvent', eventId);
+      /* socket.emit('joinEvent', eventId); */
 
       socket.on('get-active-poll', () => {
         console.log('socket on');
@@ -57,7 +57,8 @@ function Polls({eventId}) {
       }
       setCurrentAnswer(undefined);
     } catch (error) {
-      console.log('ola')
+      console.log('ola');
+      setActivePoll('');
       console.log(error);
     }
   };
@@ -126,7 +127,9 @@ function Polls({eventId}) {
     }
   };
 
-    if (isAnswerEditing || !hasUserAnswer) {
+  if (!activePoll) return <p>There is no active poll!</p>;
+
+  if (isAnswerEditing || !hasUserAnswer) {
     console.log('yWWWWW');
     return renderForm();
   }

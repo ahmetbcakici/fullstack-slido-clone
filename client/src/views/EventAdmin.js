@@ -9,7 +9,8 @@ import {
 } from '../components/EventAdmin';
 
 import {getEventId} from '../api/event';
-import PollResults from '../components/EventAdmin/PollResults';
+import {PollResults} from '../components/EventAdmin';
+import {socket} from '../config';
 
 function EventAdmin({
   match: {
@@ -23,6 +24,10 @@ function EventAdmin({
   useEffect(() => {
     findEventIdByCode();
   }, []);
+
+  useEffect(() => {
+    if (eventId) socket.emit('joinEvent', eventId);
+  }, [eventId]);
 
   const handleSetIsQuestionsSelected = (val) => {
     if (val !== true && val !== false) {

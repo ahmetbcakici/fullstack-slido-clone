@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import {Poll} from '../../models';
+import {Poll,Event} from '../../models';
 
 export default async (req, res) => {
   const {eventId, question, options, type} = req.body;
@@ -8,13 +8,14 @@ export default async (req, res) => {
   // convert false other active polls
   await Poll.updateMany({eventId, isActive: true}, {isActive: false});
 
+  const pollId = mongoose.Types.ObjectId();
   if (type === 'Multiple Choice' || type === 'Quiz') {
     req.body.options = options.map((option) => ({
       _id: mongoose.Types.ObjectId(),
       option,
     }));
     const pollGenerated = await Poll.create({
-      _id: mongoose.Types.ObjectId(),
+      _id: pollId,
       ...req.body,
     });
     res.io.to(eventId).emit('get-active-poll');
@@ -22,11 +23,15 @@ export default async (req, res) => {
   }
 
   const pollGenerated = await Poll.create({
-    _id: mongoose.Types.ObjectId(),
+    _id: pollId,
     eventId,
     question,
     type,
   });
+
+  const event = await Event.findById(eventId).select({polls: 1});
+  event.polls.push(pollId);
+  event.save();
 
   res.io.to(eventId).emit('get-active-poll');
   res.json({pollGenerated});

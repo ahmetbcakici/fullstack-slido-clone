@@ -10,6 +10,7 @@ import {
 } from '../components/EventParticipant';
 
 import {getEventId} from '../api/event';
+import {socket} from '../config';
 
 function Event({
   match: {
@@ -23,6 +24,10 @@ function Event({
   useEffect(() => {
     findEventIdByCode();
   }, []);
+
+  useEffect(() => {
+    if (eventId) socket.emit('joinEvent', eventId);
+  }, [eventId]);
 
   const handleSetIsQuestionsSelected = (val) => setIsQuestionsSelected(val);
 
