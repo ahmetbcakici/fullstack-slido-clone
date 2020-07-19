@@ -4,6 +4,7 @@ import {
   setActiveState,
   deletePoll,
   resetPollResults,
+  duplicatePoll,
 } from '../../api/poll';
 
 import {socket} from '../../config';
@@ -61,6 +62,15 @@ function PollList({eventId}) {
     }
   };
 
+  const handleDuplicatePoll = async (e) => {
+    try {
+      const pollId = e.target.parentElement.id;
+      await duplicatePoll({eventId, pollId});
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Fragment>
       <p>
@@ -77,7 +87,9 @@ function PollList({eventId}) {
                 </span>{' '}
                 <span>{question}</span>{' '}
                 <span style={{color: 'blue'}}>edit</span>{' '}
-                <span style={{color: 'green'}}>duplicate</span>{' '}
+                <span style={{color: 'green'}} onClick={handleDuplicatePoll}>
+                  duplicate
+                </span>{' '}
                 <span style={{color: 'gold'}} onClick={handleResetResults}>
                   reset results
                 </span>{' '}
