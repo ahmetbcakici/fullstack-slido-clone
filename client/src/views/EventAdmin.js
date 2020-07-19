@@ -9,7 +9,7 @@ import {
 } from '../components/EventAdmin';
 
 import {getEventId} from '../api/event';
-import PollAnswers from '../components/EventAdmin/PollAnswers';
+import PollResults from '../components/EventAdmin/PollResults';
 
 function EventAdmin({
   match: {
@@ -50,7 +50,7 @@ function EventAdmin({
           <LatestQuestion eventId={eventId} />
         </Fragment>
       ) : (
-        <PollAnswers eventId={eventId} />
+        <PollResults eventId={eventId} />
       )}
       <Stick
         eventId={eventId}

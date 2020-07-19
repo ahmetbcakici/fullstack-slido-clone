@@ -4,7 +4,7 @@ import {socket} from '../../config';
 
 import {getActivePoll} from '../../api/poll';
 
-function PollAnswers({eventId}) {
+function PollResults({eventId}) {
   const [activePoll, setActivePoll] = useState('');
 
   useEffect(() => {
@@ -31,23 +31,23 @@ function PollAnswers({eventId}) {
 
   const optionalForm = () => {
     const {options} = activePoll;
-    return(
+    return (
       <Fragment>
-        {options &&options.map(({_id,option,participantsSelected}) => (
-          <p key={_id}>{option} {participantsSelected.length}</p>
-        ))}
+        {options &&
+          options.map(({_id, option, participantsSelected}) => (
+            <p key={_id}>
+              {option} {participantsSelected.length}
+            </p>
+          ))}
       </Fragment>
-    )
+    );
   };
 
   const stringForm = () => {
     const {answers} = activePoll;
     return (
       <ul>
-        {answers &&
-          answers.map(({_id, answer}) => 
-            <li key={_id}>{answer}</li>
-         )}
+        {answers && answers.map(({_id, answer}) => <li key={_id}>{answer}</li>)}
       </ul>
     );
   };
@@ -74,4 +74,4 @@ function PollAnswers({eventId}) {
   );
 }
 
-export default PollAnswers;
+export default PollResults;

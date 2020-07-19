@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 import {socket} from '../../config';
 
 import {getActivePoll, sendAnswer} from '../../api/poll';
+import PollResults from '../EventParticipant/PollResults';
 
 function Polls({eventId}) {
   const participant = useSelector((state) => state.participantReducer);
@@ -11,6 +12,7 @@ function Polls({eventId}) {
   const [answer, setAnswer] = useState('');
   const [isAnswerEditing, setIsAnswerEditing] = useState(false);
   const [currentAnswer, setCurrentAnswer] = useState(undefined);
+  const [hasUserAnswer, setHasUserAnswer] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const {question, answers, type, options} = activePoll;
 
@@ -30,7 +32,9 @@ function Polls({eventId}) {
     let tempSelectedOptions = [...selectedOptions];
     const existCheck = tempSelectedOptions.find((item) => item == e.target.id);
     if (existCheck) {
-      tempSelectedOptions = tempSelectedOptions.filter(item => item != existCheck);
+      tempSelectedOptions = tempSelectedOptions.filter(
+        (item) => item != existCheck
+      );
       setSelectedOptions(tempSelectedOptions);
       return;
     }
@@ -41,19 +45,19 @@ function Polls({eventId}) {
   const handleGetActivePoll = async () => {
     try {
       const {data} = await getActivePoll({eventId});
-
       const currentAnswer = data.answers.find(
         (answer) => answer.ownerParticipantId === participant._id
       );
-
       setActivePoll(data);
 
       if (currentAnswer) {
+        setHasUserAnswer(true);
         setCurrentAnswer(currentAnswer);
         return;
       }
       setCurrentAnswer(undefined);
     } catch (error) {
+      console.log('ola')
       console.log(error);
     }
   };
@@ -65,7 +69,7 @@ function Polls({eventId}) {
       pollId: activePoll._id,
       type: activePoll.type,
       answer,
-      options:selectedOptions,
+      options: selectedOptions,
       ownerParticipantId: participant._id,
     });
     setIsAnswerEditing(false);
@@ -75,9 +79,8 @@ function Polls({eventId}) {
   const stringForm = () => (
     <form onSubmit={handleSubmitAnswer}>
       <input
-        type="text"
-        placeholder={currentAnswer && currentAnswer.answer}
-        value={answer}
+        type="text" /* todo deprecated */
+        /* placeholder={currentAnswer && currentAnswer.answer} */ value={answer}
         onChange={({target: {value}}) => setAnswer(value)}
       />
       <input type="submit" value="SEND" />
@@ -87,18 +90,26 @@ function Polls({eventId}) {
   const multipleChoiceForm = () => (
     <form onSubmit={handleSubmitAnswer}>
       {options &&
-        options.map(({_id, option}) => (
-          <Fragment key={_id}>
-            <input
-              type="checkbox"
-              id={_id}
-              key={_id}
-              onClick={onOptionsSelected}
-            />
-            <label htmlFor={_id}>{option}</label>
-            <br />
-          </Fragment>
-        ))}
+        options.map(({_id, option, participantsSelected}) => {
+          const checkedControl = participantsSelected.includes(
+            participant._id.toString()
+          );
+          if (checkedControl) setHasUserAnswer(true);
+          return (
+            <Fragment key={_id}>
+              <input
+                type="checkbox"
+                id={_id}
+                key={_id}
+                onClick={onOptionsSelected}
+              />
+              <label style={{color: checkedControl && 'blue'}} htmlFor={_id}>
+                {option}
+              </label>
+              <br />
+            </Fragment>
+          );
+        })}
       <input type="submit" value="SUBMIT" />
     </form>
   );
@@ -115,33 +126,31 @@ function Polls({eventId}) {
     }
   };
 
+    if (isAnswerEditing || !hasUserAnswer) {
+    console.log('yWWWWW');
+    return renderForm();
+  }
+  console.log('xQQQQqqqq');
+  return (
+    <PollResults
+      eventId={eventId}
+      setIsAnswerEditing={setIsAnswerEditing}
+      setHasUserAnswer={setHasUserAnswer}
+    />
+  );
+
   return (
     <Fragment>
       {question}
 
-      {currentAnswer && !isAnswerEditing ? (
-        <ul>
-          {answers &&
-            answers.map(({_id, answer}) => {
-              if (currentAnswer._id == _id) {
-                return (
-                  <li key={_id} style={{color: 'blue'}}>
-                    {answer}{' '}
-                    <b
-                      style={{color: 'black'}}
-                      onClick={() => setIsAnswerEditing(true)}
-                    >
-                      edit
-                    </b>
-                  </li>
-                );
-              }
-
-              return <li>{answer}</li>;
-            })}
-        </ul>
-      ) : (
+      {isAnswerEditing ? (
         renderForm()
+      ) : (
+        <PollResults
+          eventId={eventId}
+          setIsAnswerEditing={setIsAnswerEditing}
+          setHasUserAnswer={setHasUserAnswer}
+        />
       )}
     </Fragment>
   );
