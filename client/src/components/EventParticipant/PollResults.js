@@ -20,7 +20,7 @@ function PollResults({eventId, setIsAnswerEditing}) {
       /* socket.emit('joinEvent', eventId); */
 
       socket.on('get-active-poll', () => {
-        console.log('socket on');
+        console.log('socket on participant pollresults.js');
         handleGetActivePoll();
       });
     }

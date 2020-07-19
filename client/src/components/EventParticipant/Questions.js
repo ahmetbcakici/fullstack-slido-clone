@@ -24,7 +24,7 @@ function Questions({eventId}) {
       /* socket.emit('joinEvent', eventId); */
 
       socket.on('set-questions', () => {
-        console.log('socket on');
+        console.log('socket on participant questions.js');
         handleGetQuestions();
       });
     }
@@ -90,9 +90,14 @@ function Questions({eventId}) {
           likeCount,
         }) => {
           let isQuestionOwner = false;
-          if (ownerParticipantId._id === participant._id) isQuestionOwner = true;
+          if (ownerParticipantId._id === participant._id)
+            isQuestionOwner = true;
           return (
-            <div key={_id} id={_id} style={{background: isHighlighted && 'tomato'}}>
+            <div
+              key={_id}
+              id={_id}
+              style={{background: isHighlighted && 'tomato'}}
+            >
               <b>{isAnon ? 'Anon' : ownerParticipantId.name}: </b>
               {question} <small>{generatedAt}</small>
               <br />
@@ -114,7 +119,7 @@ function Questions({eventId}) {
               <span style={{color: 'green'}} onClick={handleLikeQuestion}>
                 like {likeCount}
               </span>
-              <div  style={{display: !questionEditing && 'none'}}>
+              <div style={{display: !questionEditing && 'none'}}>
                 <input
                   type="text"
                   value={questionEdit}

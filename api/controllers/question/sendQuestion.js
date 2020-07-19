@@ -23,6 +23,6 @@ export default async (req, res) => {
   event.save();
   participant.save();
 
-  res.io.emit('set-questions');
+  res.io.to(eventId).emit('set-questions');
   res.send();
 };

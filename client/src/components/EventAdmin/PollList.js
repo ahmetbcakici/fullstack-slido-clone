@@ -1,5 +1,10 @@
 import React, {useState, useEffect, Fragment} from 'react';
-import {getPollsByEvent, setActiveState, deletePoll} from '../../api/poll';
+import {
+  getPollsByEvent,
+  setActiveState,
+  deletePoll,
+  resetPollResults,
+} from '../../api/poll';
 
 import {socket} from '../../config';
 
@@ -47,6 +52,15 @@ function PollList({eventId}) {
     }
   };
 
+  const handleResetResults = async (e) => {
+    try {
+      const pollId = e.target.parentElement.id;
+      await resetPollResults({eventId, pollId});
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Fragment>
       <p>
@@ -64,7 +78,9 @@ function PollList({eventId}) {
                 <span>{question}</span>{' '}
                 <span style={{color: 'blue'}}>edit</span>{' '}
                 <span style={{color: 'green'}}>duplicate</span>{' '}
-                <span style={{color: 'gold'}}>reset results</span>{' '}
+                <span style={{color: 'gold'}} onClick={handleResetResults}>
+                  reset results
+                </span>{' '}
                 <span style={{color: 'tomato'}} onClick={handleDeletePoll}>
                   delete
                 </span>

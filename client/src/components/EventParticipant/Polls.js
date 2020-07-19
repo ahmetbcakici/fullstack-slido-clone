@@ -22,7 +22,7 @@ function Polls({eventId}) {
       /* socket.emit('joinEvent', eventId); */
 
       socket.on('get-active-poll', () => {
-        console.log('socket on');
+        console.log('socket on - participant polls.js');
         handleGetActivePoll();
       });
     }
@@ -45,9 +45,11 @@ function Polls({eventId}) {
   const handleGetActivePoll = async () => {
     try {
       const {data} = await getActivePoll({eventId});
+      console.log('data cekildi');
       const currentAnswer = data.answers.find(
         (answer) => answer.ownerParticipantId === participant._id
       );
+      setAnswer('');
       setActivePoll(data);
 
       if (currentAnswer) {
@@ -55,6 +57,7 @@ function Polls({eventId}) {
         setCurrentAnswer(currentAnswer);
         return;
       }
+      setHasUserAnswer(false);
       setCurrentAnswer(undefined);
     } catch (error) {
       console.log('ola');
