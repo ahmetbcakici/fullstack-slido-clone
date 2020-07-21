@@ -12,11 +12,10 @@ const optionsSchema = new Schema({
     default: false,
   },
   participantsSelected: [
-    String,
-    /* {
+    {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Participant',
-    }, */
+    },
   ],
 });
 const answersSchema = new Schema({
@@ -38,6 +37,14 @@ const pollSchema = new Schema({
   isActive: {
     type: Boolean,
     default: true,
+  },
+  isLocked: {
+    type: Boolean,
+    default: false,
+  },
+  hideResults: {
+    type: Boolean,
+    default: false,
   },
   question: {
     type: String,

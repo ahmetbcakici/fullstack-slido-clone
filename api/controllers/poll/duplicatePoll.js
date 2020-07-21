@@ -15,14 +15,19 @@ export default async (req, res) => {
     option.participantsSelected = [];
   });
 
+  const duplicatedPollId = mongoose.Types.ObjectId();
   await Poll.create({
-    _id: mongoose.Types.ObjectId(),
+    _id: duplicatedPollId,
     isActive: false,
     type,
     eventId,
     question,
     options,
   });
+
+  const event = await Event.findById(eventId).select({polls: 1});
+  event.polls.push(duplicatedPollId);
+  event.save();
 
   res.io.to(eventId).emit('get-active-poll');
   res.send();
