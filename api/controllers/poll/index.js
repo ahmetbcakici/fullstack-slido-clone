@@ -7,3 +7,4 @@ export {default as deletePoll} from './deletePoll';
 export {default as resetPollResults} from './resetPollResults';
 export {default as duplicatePoll} from './duplicatePoll';
 export {default as setLockState} from './setLockState';
+export {default as setHideResultState} from './setHideResultState';

@@ -10,6 +10,7 @@ import {
   resetPollResults,
   duplicatePoll,
   setLockState,
+  setHideResultState
 } from '../controllers/poll';
 
 const router = express.Router();
@@ -21,6 +22,7 @@ router.post('/answer', sendAnswer);
 router.post('/duplicate', duplicatePoll);
 router.patch('/set-active', setActiveState);
 router.patch('/set-lock', setLockState);
+router.patch('/set-hide-result', setHideResultState);
 router.patch('/reset-results', resetPollResults);
 router.delete('/', deletePoll);
 
