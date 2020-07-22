@@ -59,6 +59,7 @@ function EventAdmin({
       )}
       <Stick
         eventId={eventId}
+        eventCode={code}
         handleSetIsQuestionsSelected={handleSetIsQuestionsSelected}
       />
     </Fragment>
