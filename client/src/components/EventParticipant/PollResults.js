@@ -44,43 +44,72 @@ function PollResults({eventId, setIsAnswerEditing}) {
     }
   };
 
-  return (
-    <Fragment>
-      {options &&
-        options.map(({_id, option, participantsSelected}) => {
-          const checkedControl = participantsSelected.includes(
-            participant._id.toString()
-          );
-          return (
-            <Fragment>
-              <p key={_id} style={{color: checkedControl && 'blue'}}>
-                {option} {participantsSelected.length}
-              </p>
-            </Fragment>
-          );
-        })}
-      <button onClick={() => setIsAnswerEditing(true)}>edit response</button>
-      {answers &&
-      currentAnswer /* todo bad practice */ &&
-        answers.map(({_id, answer}) => {
-          if (currentAnswer._id == _id) {
-            return (
-              <li key={_id} style={{color: 'blue'}}>
-                {answer}{' '}
-                <b
-                  style={{color: 'black'}}
-                  onClick={() => setIsAnswerEditing(true)}
-                >
-                  edit
-                </b>
-              </li>
-            );
-          }
+  const renderResults = () => {
+    switch (type) {
+      case 'Multiple Choice': {
+        return (
+          <Fragment>
+            {options &&
+              options.map(({_id, option, participantsSelected}) => {
+                const checkedControl = participantsSelected.includes(
+                  participant._id.toString()
+                );
+                return (
+                  <Fragment>
+                    <p key={_id} style={{color: checkedControl && 'blue'}}>
+                      {option} {participantsSelected.length}
+                    </p>
+                  </Fragment>
+                );
+              })}
+            <button onClick={() => setIsAnswerEditing(true)}>
+              edit response
+            </button>
+          </Fragment>
+        );
+      }
+      case 'Rating': {
+        let total = 0;
+        let count = answers.length;
+        answers.map(({answer}) => (total += parseInt(answer)));
+        return (
+          <Fragment>
+            <p>Score: {total / count}</p>
+          </Fragment>
+        );
+      }
+      case 'Open Text':
+      case 'Word Cloud': {
+        return (
+          <Fragment>
+            {answers &&
+            currentAnswer /* todo bad practice */ &&
+              answers.map(({_id, answer}) => {
+                if (currentAnswer._id == _id) {
+                  return (
+                    <li key={_id} style={{color: 'blue'}}>
+                      {answer}{' '}
+                      <b
+                        style={{color: 'black'}}
+                        onClick={() => setIsAnswerEditing(true)}
+                      >
+                        edit
+                      </b>
+                    </li>
+                  );
+                }
 
-          return <li>{answer}</li>;
-        })}
-    </Fragment>
-  );
+                return <li>{answer}</li>;
+              })}
+          </Fragment>
+        );
+      }
+      default:
+        console.log('default s-c ');
+    }
+  };
+
+  return <Fragment>{renderResults()}</Fragment>;
 }
 
 export default PollResults;

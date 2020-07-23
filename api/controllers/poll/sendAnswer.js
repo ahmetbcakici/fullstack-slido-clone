@@ -6,7 +6,6 @@ export default async (req, res) => {
   const {eventId, pollId, type, answer, options, ownerParticipantId} = req.body;
 
   const poll = await Poll.findById(pollId);
-  console.log(options)
 
   switch (type) {
     case 'Multiple Choice': {
@@ -25,7 +24,9 @@ export default async (req, res) => {
       });
       break;
     }
-    case 'Open Text': {
+    case 'Rating':
+    case 'Open Text':
+    case 'Word Cloud': {
       const currentAnswer = poll.answers.find(
         (answer) => answer.ownerParticipantId == ownerParticipantId
       );
@@ -36,6 +37,7 @@ export default async (req, res) => {
         answer,
         ownerParticipantId,
       });
+      break;
     }
     default:
       console.log('default s-c ');

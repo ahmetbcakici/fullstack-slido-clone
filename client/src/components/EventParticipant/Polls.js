@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 import {socket} from '../../config';
 
 import {getActivePoll, sendAnswer, setActiveState} from '../../api/poll';
+import {returnWordCount} from '../../utils';
 import PollResults from '../EventParticipant/PollResults';
 
 function Polls({eventId}) {
@@ -67,6 +68,9 @@ function Polls({eventId}) {
 
   const handleSubmitAnswer = async (e) => {
     e.preventDefault();
+
+    if (type === 'Word Cloud' && returnWordCount(answer) > 1) return; // prevent send words more than one in word cloud mode
+
     await sendAnswer({
       eventId,
       pollId: activePoll._id,
@@ -86,6 +90,22 @@ function Polls({eventId}) {
         /* placeholder={currentAnswer && currentAnswer.answer} */ value={answer}
         onChange={({target: {value}}) => setAnswer(value)}
       />
+      <input type="submit" value="SEND" />
+    </form>
+  );
+
+  const ratingForm = () => (
+    <form onSubmit={handleSubmitAnswer}>
+      <ul>
+        {[1, 2, 3, 4, 5].map((item) => (
+          <li
+            onClick={() => setAnswer(item)}
+            style={{color: item === answer && 'blue'}}
+          >
+            {item}
+          </li>
+        ))}
+      </ul>
       <input type="submit" value="SEND" />
     </form>
   );
@@ -121,6 +141,8 @@ function Polls({eventId}) {
     switch (type) {
       case 'Multiple Choice':
         return multipleChoiceForm();
+      case 'Rating':
+        return ratingForm();
       case 'Open Text':
       case 'Word Cloud':
         return stringForm();

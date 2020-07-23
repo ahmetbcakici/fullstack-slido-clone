@@ -6,6 +6,7 @@ import {getActivePoll} from '../../api/poll';
 
 function PollResults({eventId}) {
   const [activePoll, setActivePoll] = useState('');
+  const {answers, options, type, question} = activePoll;
 
   useEffect(() => {
     if (eventId) {
@@ -28,8 +29,7 @@ function PollResults({eventId}) {
     }
   };
 
-  const optionalForm = () => {
-    const {options} = activePoll;
+  const multipleChoiceForm = () => {
     return (
       <Fragment>
         {options &&
@@ -42,8 +42,18 @@ function PollResults({eventId}) {
     );
   };
 
+  const ratingForm = () => {
+    let total = 0;
+    let count = answers.length;
+    answers.map(({answer}) => (total += parseInt(answer)));
+    return (
+      <Fragment>
+        <p>Score: {total / count}</p>
+      </Fragment>
+    );
+  };
+
   const stringForm = () => {
-    const {answers} = activePoll;
     return (
       <ul>
         {answers && answers.map(({_id, answer}) => <li key={_id}>{answer}</li>)}
@@ -52,19 +62,19 @@ function PollResults({eventId}) {
   };
 
   const renderForm = () => {
-    const {type} = activePoll;
     switch (type) {
       case 'Multiple Choice':
-        return optionalForm();
+        return multipleChoiceForm();
+      case 'Rating':
+        return ratingForm();
       case 'Open Text':
       case 'Word Cloud':
         return stringForm();
       default:
-        return optionalForm();
+        console.log('eventadmin > pollresults.js > s-c default');
     }
   };
 
-  const {question} = activePoll;
   return (
     <Fragment>
       {question}
