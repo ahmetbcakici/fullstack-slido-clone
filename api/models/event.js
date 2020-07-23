@@ -9,6 +9,10 @@ const eventSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  disableQA: {
+    type: Boolean,
+    default: false,
+  },
   code: String,
   questions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Question'}],
   polls: [{type: mongoose.Schema.Types.ObjectId, ref: 'Poll'}],

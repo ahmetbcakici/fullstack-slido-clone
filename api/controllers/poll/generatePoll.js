@@ -5,6 +5,9 @@ import {Poll,Event} from '../../models';
 export default async (req, res) => {
   const {eventId, question, options, type} = req.body;
 
+  const pollCount = await Poll.countDocuments({eventId})
+  if(pollCount >= 3) return res.status(400).send();
+
   // convert false other active polls
   await Poll.updateMany({eventId, isActive: true}, {isActive: false});
 

@@ -5,6 +5,7 @@ import NewPoll from './NewPoll';
 import PollList from './PollList';
 
 import {setLockState, setHideResultState} from '../../api/poll';
+import {setQAState} from '../../api/event';
 
 function Stick({eventId, eventCode, handleSetIsQuestionsSelected}) {
   const handleSetLockState = async (e) => {
@@ -18,6 +19,14 @@ function Stick({eventId, eventCode, handleSetIsQuestionsSelected}) {
   const handleSetHideResultState = async (e) => {
     try {
       await setHideResultState({eventId});
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSetQAState = async (e) => {
+    try {
+      await setQAState({eventId});
     } catch (error) {
       console.log(error);
     }
@@ -46,11 +55,8 @@ function Stick({eventId, eventCode, handleSetIsQuestionsSelected}) {
             </a>
           </CopyToClipboard>
         </li>
-        <li>disable participant Q&A</li>
+        <li onClick={handleSetQAState}>disable participant Q&A</li>
       </ul>
-
-      <br />
-      <button>full screen</button>
     </div>
   );
 }
