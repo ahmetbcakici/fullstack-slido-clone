@@ -103,7 +103,7 @@ function Questions({eventId}) {
               {isQuestionOwner && (
                 <span
                   style={{color: 'red'}}
-                  onClick={() => setQuestionEditing(true)}
+                  onClick={() => setQuestionEditing(_id)}
                 >
                   edit
                 </span>
@@ -118,7 +118,7 @@ function Questions({eventId}) {
               <span style={{color: 'green'}} onClick={handleLikeQuestion}>
                 like {likeCount}
               </span>
-              <div style={{display: !questionEditing && 'none'}}>
+              <div style={{display: _id != questionEditing && 'none'}}>
                 <input
                   type="text"
                   value={questionEdit}
