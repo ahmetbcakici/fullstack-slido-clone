@@ -11,15 +11,16 @@ import {
   likeQuestion,
 } from '../../api/question';
 
-function Questions({eventId}) {
+function Questions({event}) {
   const [questionEdit, setQuestionEdit] = useState('');
   const [questions, setQuestions] = useState('');
   const [questionEditing, setQuestionEditing] = useState(false);
   const [isPopularSelected, setIsPopularSelected] = useState(true);
   const participant = useSelector((state) => state.participantReducer);
+  const {_id: eventId} = event;
 
   useEffect(() => {
-    if (eventId) {
+    if (event) {
       handleGetQuestions();
 
       socket.on('set-questions', () => {
@@ -27,7 +28,7 @@ function Questions({eventId}) {
         handleGetQuestions();
       });
     }
-  }, [eventId]);
+  }, [event]);
 
   useEffect(() => {
     if (questions) sortQuestions(questions);

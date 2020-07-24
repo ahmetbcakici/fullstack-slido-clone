@@ -2,13 +2,13 @@ import express from 'express';
 
 import {
   generateEvent,
-  getEventId,
+  getEvent,
   setQAState
 } from '../controllers/event';
 
 const router = express.Router();
 
-router.get('/:eventCode', getEventId);
+router.get('/:eventCode', getEvent);
 router.post('/', generateEvent);
 router.patch('/set-qa', setQAState);
 

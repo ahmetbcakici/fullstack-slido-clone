@@ -9,7 +9,7 @@ import {
   Sidebar,
 } from '../components/EventParticipant';
 
-import {getEventId} from '../api/event';
+import {getEvent} from '../api/event';
 import {socket} from '../config';
 
 function Event({
@@ -19,22 +19,31 @@ function Event({
 }) {
   const [isQuestionsSelected, setIsQuestionsSelected] = useState(false);
   const [eventId, setEventId] = useState('');
+  const [event, setEvent] = useState('');
   const history = useHistory();
 
   useEffect(() => {
-    findEventIdByCode();
+    handleGetEvent();
   }, []);
 
   useEffect(() => {
-    if (eventId) socket.emit('joinEvent', eventId);
+    if (eventId) {
+      socket.emit('joinEvent', eventId);
+
+      socket.on('set-event', () => {
+        console.log('socket on participant questions.js');
+        handleGetEvent();
+      });
+    }
   }, [eventId]);
 
   const handleSetIsQuestionsSelected = (val) => setIsQuestionsSelected(val);
 
-  const findEventIdByCode = async () => {
+  const handleGetEvent = async () => {
     try {
-      const eventId = await getEventId({eventCode: code});
-      setEventId(eventId);
+      const event = await getEvent({eventCode: code});
+      setEventId(event._id);
+      setEvent(event);
     } catch (error) {
       history.push('/404');
     }
@@ -48,10 +57,14 @@ function Event({
       />
       {/* Sidebar */}
       {isQuestionsSelected ? (
-        <Fragment>
-          <AskToSpeaker eventId={eventId} />
-          <Questions eventId={eventId} />
-        </Fragment>
+        event.disableQA ? (
+          <h1>Disabled</h1>
+        ) : (
+          <Fragment>
+            <AskToSpeaker eventId={eventId} />
+            <Questions event={event} />
+          </Fragment>
+        )
       ) : (
         <Polls eventId={eventId} />
       )}

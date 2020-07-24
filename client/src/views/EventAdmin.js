@@ -8,7 +8,7 @@ import {
   Stick,
 } from '../components/EventAdmin';
 
-import {getEventId} from '../api/event';
+import {getEvent} from '../api/event';
 import {PollResults} from '../components/EventAdmin';
 import {socket} from '../config';
 
@@ -19,10 +19,11 @@ function EventAdmin({
 }) {
   const [isQuestionsSelected, setIsQuestionsSelected] = useState(false);
   const [eventId, setEventId] = useState('');
+  const [event, setEvent] = useState('');
   const history = useHistory();
 
   useEffect(() => {
-    findEventIdByCode();
+    handleGetEvent();
   }, []);
 
   useEffect(() => {
@@ -37,10 +38,11 @@ function EventAdmin({
     setIsQuestionsSelected(val);
   };
 
-  const findEventIdByCode = async () => {
+  const handleGetEvent = async () => {
     try {
-      const eventId = await getEventId({eventCode: code});
-      setEventId(eventId);
+      const event = await getEvent({eventCode: code});
+      setEventId(event._id);
+      setEvent(event);
     } catch (error) {
       history.push('/404');
     }

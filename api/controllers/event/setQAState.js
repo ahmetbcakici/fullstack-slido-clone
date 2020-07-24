@@ -10,6 +10,6 @@ export default async (req, res) => {
   event.disableQA = !currentState;
   event.save();
 
-  res.io.to(eventId).emit('set-questions');
+  res.io.to(eventId).emit('set-event');
   res.send();
 };
