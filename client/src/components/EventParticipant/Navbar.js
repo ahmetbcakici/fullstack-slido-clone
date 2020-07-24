@@ -1,14 +1,16 @@
 import React from 'react';
 
-function EventParticipantNavbar({handleSetIsQuestionsSelected}) {
+import {isoToNormal} from '../../utils';
+
+function EventParticipantNavbar({event, handleSetIsQuestionsSelected}) {
+  const {generatedAt, code} = event;
   return (
     <nav>
       <ul>
-        <li>hamburger</li>
-        <li>Meeting - 6/24/2020</li>
+        <li>#{code}</li>
+        <li>Meeting - {isoToNormal(generatedAt)}</li>
         <li onClick={() => handleSetIsQuestionsSelected(true)}>Q&A</li>
         <li onClick={() => handleSetIsQuestionsSelected(false)}>Polls</li>
-        <li>user icon ve altında (edit my profile, my questions, log out)</li>
       </ul>
     </nav>
   );

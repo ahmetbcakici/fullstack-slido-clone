@@ -52,7 +52,7 @@ function Event({
   return (
     <Fragment>
       <Navbar
-        eventId={eventId}
+        event={event}
         handleSetIsQuestionsSelected={handleSetIsQuestionsSelected}
       />
       {/* Sidebar */}
