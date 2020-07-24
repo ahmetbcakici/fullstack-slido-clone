@@ -15,7 +15,7 @@ function Polls({eventId}) {
   const [currentAnswer, setCurrentAnswer] = useState(undefined);
   const [hasUserAnswer, setHasUserAnswer] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const {question, answers, type, options} = activePoll;
+  const {question, answers, type, options, isLocked, hideResults} = activePoll;
 
   useEffect(() => {
     if (eventId && participant) {
@@ -153,32 +153,18 @@ function Polls({eventId}) {
 
   if (!activePoll) return <p>There is no active poll!</p>;
 
-  if (isAnswerEditing || !hasUserAnswer) {
-    console.log('yWWWWW');
-    return renderForm();
-  }
-  console.log('xQQQQqqqq');
-  return (
-    <PollResults
-      eventId={eventId}
-      setIsAnswerEditing={setIsAnswerEditing}
-      setHasUserAnswer={setHasUserAnswer}
-    />
-  );
+  if (hideResults) return <p>Results are hidden</p>;
+
+  if ((isAnswerEditing || !hasUserAnswer) && !isLocked) return renderForm();
 
   return (
     <Fragment>
-      {question}
-
-      {isAnswerEditing ? (
-        renderForm()
-      ) : (
-        <PollResults
-          eventId={eventId}
-          setIsAnswerEditing={setIsAnswerEditing}
-          setHasUserAnswer={setHasUserAnswer}
-        />
-      )}
+      {isLocked && <p>vote locked</p>}
+      <PollResults
+        eventId={eventId}
+        setIsAnswerEditing={setIsAnswerEditing}
+        setHasUserAnswer={setHasUserAnswer}
+      />
     </Fragment>
   );
 }
