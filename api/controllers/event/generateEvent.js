@@ -14,10 +14,10 @@ export default async (req, res) => {
     unique = await Event.countDocuments({code});
   } while (unique > 0);
 
-  const ress = await Event.create({
+  const event = await Event.create({
     _id: mongoose.Types.ObjectId(),
     ownerUserId,
     code,
   });
-  return res.send(ress);
+  return res.send(event);
 };

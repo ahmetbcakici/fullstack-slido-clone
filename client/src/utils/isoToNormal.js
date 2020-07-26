@@ -7,5 +7,5 @@ export default (date) => {
     day: 'numeric',
   };
   const normalDate = new Date(date);
-  return normalDate.toLocaleDateString('tr-TR', options);
+  return normalDate.toLocaleDateString('en-US', options);
 };
